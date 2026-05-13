@@ -1,0 +1,6 @@
+# Ignore build artifacts
+build/
+
+# Ignore *.tmp and *.log 
+*.tmp
+*.log
