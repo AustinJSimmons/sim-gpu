@@ -6,10 +6,10 @@ having a interesting and fun structured end goal.
 
 ### Table-Of-Contents
 
-- [Overview] (#Overview)
-- [Architecture] (#Architecture)
-- [Simulation] (#Simulation)
-- [TODO] (##TODO)
+- [Overview] (#overview)
+- [Architecture] (#architecture)
+- [Simulation] (#simulation)
+- [TODO] (#todo)
 
 # Overview
 
@@ -19,6 +19,5 @@ having a interesting and fun structured end goal.
 
 # TODO
 
--[ ] Create a architecture design diagram to identify the projects structure.
-
+- [ ] Create a architecture design diagram to identify the projects structure.
 - [ ] Figure out how to simulate individual components in C++.
