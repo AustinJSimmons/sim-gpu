@@ -6,10 +6,10 @@ having a interesting and fun structured end goal.
 
 ### Table-Of-Contents
 
-- [Overview] (#overview)
-- [Architecture] (#architecture)
-- [Simulation] (#simulation)
-- [TODO] (#todo)
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Simulation](#simulation)
+- [TODO](#todo)
 
 # Overview
 
