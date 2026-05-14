@@ -20,8 +20,7 @@ go.
 
 # Simulation
 
-# TODO
+# TODO (High Level)
 
-- [ ] Design the clock, event driven system and pins/wire system to simulate hardware.
-- [ ] Diagram out a GPU and what its components do at a high level
-- [ ] Write a description of each components function to help in guide simulation code.
+- [ ] Look into SystemC more in depth for discrete event simulation.
+- [ ] Design a basic GPU in SystemC using cycle accurate modeling ideally.

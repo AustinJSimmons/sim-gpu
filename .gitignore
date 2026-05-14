@@ -1,6 +1,8 @@
 # Ignore build artifacts
 build/
+.cache/
 
 # Ignore *.tmp and *.log 
 *.tmp
 *.log
+*.json
