@@ -43,6 +43,7 @@ types.
 
 S-type instructions like LOAD and STORE access memory and either a source or destination
 register.
+
 ![S-Type Bitmap layout](docs/S-Type.svg#gh-light-mode-only)
 ![S-Type Bitmap layout](docs/S-type-white.svg#gh-dark-mode-only)
 
@@ -60,6 +61,7 @@ register. MOV just copies the contents of the source to the destination.
 J-Type instructions use predicates and a memory address to jump around in
 memory. Still don't know if this is useful for my GPU simulation yet nor how it
 works.
+
 ![J-Type Bitmap layout](docs/J-Type.svg#gh-light-mode-only)
 ![J-Type Bitmap layout](docs/J-type-white.svg#gh-dark-mode-only)
 
