@@ -11,6 +11,8 @@ go.
 
 - [Overview](#overview)
 - [Architecture](#architecture)
+  - [GPU Architecture (High Level)](#gpu-architecture)
+  - [Compute Unit Architecture](#compute-unit)
   - [ISA Attempt](#isa-attempt)
 - [Simulation](#simulation)
 - [TODO](#todo)
@@ -18,6 +20,14 @@ go.
 # Overview
 
 # Architecture
+
+## GPU Architecture
+
+![High Level GPU Diagram](docs/High-Level-GPU-Architecture.drawio.svg)
+
+## Compute Unit Architecture
+
+![High Level Compute Unit Architecture Diagram](docs/Compute-Unit.drawio.svg)
 
 ## ISA Attempt
 
