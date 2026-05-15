@@ -38,9 +38,12 @@ maps describing the layout of specific instruction types.
 | `NOT` | `0x09` | M-Type | reg_dest = NOT reg_dest |
 | `XOR` | `0x09` | M-Type | reg_dest = reg_dest XOR reg_src |
 
-![S-Type Bitmap layout](docs/S-Type.svg)
-![M-Type Bitmap layout](docs/M-Type.svg)
-![J-Type Bitmap layout](docs/J-Type.svg)
+![S-Type Bitmap layout](docs/S-Type.svg#gh-light-mode-only)
+![M-Type Bitmap layout](docs/M-Type.svg#gh-light-mode-only)
+![J-Type Bitmap layout](docs/J-Type.svg#gh-light-mode-only)
+![S-Type Bitmap layout](docs/S-type-white.svg#gh-dark-mode-only)
+![M-Type Bitmap layout](docs/M-type-white.svg#gh-dark-mode-only)
+![J-Type Bitmap layout](docs/J-type-white.svg#gh-dark-mode-only)
 
 # Simulation
 
