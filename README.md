@@ -11,12 +11,36 @@ go.
 
 - [Overview](#overview)
 - [Architecture](#architecture)
+  - [ISA Attempt](#isa-attempt)
 - [Simulation](#simulation)
 - [TODO](#todo)
 
 # Overview
 
 # Architecture
+
+## ISA Attempt
+
+For this project I plan to simulate a 32bit instruction set below the table of planned supported operators will be a couple bit
+maps describing the layout of specific instruction types.
+
+| Mnemonic | Op-code | Instruction Type | Description |
+| :--- | :--- | :--- | :--- |
+| `LOAD` | `0x00` | S-Type | reg_src ->  mem_addr |
+| `STORE` | `0x01` | S-Type | mem_addr -> reg_dest |
+| `MOV` | `0x02` | M-Type | reg_src -> reg_dest |
+| `ADD` | `0x03` | M-Type | reg_dest = reg_dest + reg_src |
+| `SUB` | `0x04` | M-Type | reg_dest = reg_dest - reg_src |
+| `MUL` | `0x05` | M-Type | reg_dest *= reg_src |
+| `JUMP` | `0x06` | J-Type | idk yet but involves mem_addr and predicates |
+| `AND` | `0x07` | M-Type | reg_dest = reg_dest AND reg_src |
+| `OR` | `0x08` | M-Type | reg_dest = reg_dest OR reg_src |
+| `NOT` | `0x09` | M-Type | reg_dest = NOT reg_dest |
+| `XOR` | `0x09` | M-Type | reg_dest = reg_dest XOR reg_src |
+
+![S-Type Bitmap layout](docs/S-Type.svg)
+![M-Type Bitmap layout](docs/M-Type.svg)
+![J-Type Bitmap layout](docs/J-Type.svg)
 
 # Simulation
 
