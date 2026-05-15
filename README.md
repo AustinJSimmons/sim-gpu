@@ -21,8 +21,9 @@ go.
 
 ## ISA Attempt
 
-For this project I plan to simulate a 32bit instruction set below the table of planned supported operators will be a couple bit
-maps describing the layout of specific instruction types.
+For this project I plan to simulate a 32bit instruction set below the table of planned
+supported operators will be a couple bitmaps describing the layout of specific instruction
+types.
 
 | Mnemonic | Op-code | Instruction Type | Description |
 | :--- | :--- | :--- | :--- |
@@ -38,11 +39,28 @@ maps describing the layout of specific instruction types.
 | `NOT` | `0x09` | M-Type | reg_dest = NOT reg_dest |
 | `XOR` | `0x09` | M-Type | reg_dest = reg_dest XOR reg_src |
 
+#### S-Type Instruction
+
+S-type instructions like LOAD and STORE access memory and either a source or destination
+register.
 ![S-Type Bitmap layout](docs/S-Type.svg#gh-light-mode-only)
-![M-Type Bitmap layout](docs/M-Type.svg#gh-light-mode-only)
-![J-Type Bitmap layout](docs/J-Type.svg#gh-light-mode-only)
 ![S-Type Bitmap layout](docs/S-type-white.svg#gh-dark-mode-only)
+
+#### M-Type Instruction
+
+M-type instructions access two registers (source and destination) and performs
+some operation on the values within each, storing the output at the destination
+register. MOV just copies the contents of the source to the destination.
+
+![M-Type Bitmap layout](docs/M-Type.svg#gh-light-mode-only)
 ![M-Type Bitmap layout](docs/M-type-white.svg#gh-dark-mode-only)
+
+#### J-Type Instruction
+
+J-Type instructions use predicates and a memory address to jump around in
+memory. Still don't know if this is useful for my GPU simulation yet nor how it
+works.
+![J-Type Bitmap layout](docs/J-Type.svg#gh-light-mode-only)
 ![J-Type Bitmap layout](docs/J-type-white.svg#gh-dark-mode-only)
 
 # Simulation
