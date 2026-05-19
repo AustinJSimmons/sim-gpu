@@ -77,7 +77,26 @@ works.
 
 # Simulation
 
-# TODO (High Level)
+# TODO
 
-- [ ] Look into SystemC more in depth for discrete event simulation.
-- [ ] Design a basic GPU in SystemC using cycle accurate modeling ideally.
+- [ ] Figure out how to functionally test modules in systemc.
+- [ ] Get a functional simulation done first without worrying about cycle timing accuracy.
+  - [ ] Processing Element simulated and tested (Functional)
+    - [ ] ALU simulated and tested
+    - [ ] FPU simulated and tested
+    - [ ] LSU simulated and tested
+    - [ ] SFU ~ If needed
+  - [ ] Compute unit/SM simulated and tested
+    - [ ] Control unit simulated and tested
+      - [ ] Instruction Cache
+      - [ ] Decoder
+      - [ ] Scheduler
+      - [ ] Dispatcher
+    - [ ] Register File Simulated and tested
+    - [ ] L1 Cache simulated and tested
+  - [ ] GPU simulated and tested
+    - [ ] Scheduler (warp?) simulated and tested
+    - [ ] L2 Cache
+    - [ ] Memory Controller
+    - [ ] High-speed Bus?
+- [ ] Implement Cycle Accurate simulation methods after functional Simulation is complete.
