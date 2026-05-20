@@ -18,18 +18,17 @@
 #include <systemc.h>
 // Must include child Modules
 
-SC_MODULE(ProcessingElement) {
-  // 1. Ports (how it connects to the rest of the GPU)
+SC_MODULE(ProcessingElement){
+    // 1. Ports (how it connects to the rest of the GPU)
 
-  // 2. Internal Signals (Wiring)
+    // 2. Internal Signals (Wiring)
 
-  // 3. Child Modules (Internal Components)
+    // 3. Child Modules (Internal Components)
 
-  // Constructor prototype
-  SC_CTOR(ProcessingElement);
+    // Constructor prototype
+    SC_CTOR(ProcessingElement)
 
-  // Destructor prototype
-  ~ProcessingElement();
-};
+    // Destructor prototype
+    ~ProcessingElement()};
 
 #endif
