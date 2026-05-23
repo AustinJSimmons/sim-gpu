@@ -23,6 +23,24 @@ void ALU::execute() {
   case 0x05:
     res = a * b;
     break; // MUL
+  case 0x07:
+    res = a & b;
+    break; // AND
+  case 0x08:
+    res = a | b;
+    break; // OR
+  case 0x09:
+    res = ~a;
+    break; // NOT
+  case 0x0A:
+    res = a ^ b;
+    break; // XOR
+  case 0x0B:
+    res = a << b;
+    break;
+  case 0x0C:
+    res = a >> b;
+    break;
   default:
     res = 0;
   }

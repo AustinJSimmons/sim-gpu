@@ -47,7 +47,12 @@ types.
 | `AND` | `0x07` | M-Type | reg_dest = reg_dest AND reg_src |
 | `OR` | `0x08` | M-Type | reg_dest = reg_dest OR reg_src |
 | `NOT` | `0x09` | M-Type | reg_dest = NOT reg_dest |
-| `XOR` | `0x09` | M-Type | reg_dest = reg_dest XOR reg_src |
+| `XOR` | `0x0A` | M-Type | reg_dest = reg_dest XOR reg_src |
+| `LS` | `0x0B` | M-Type |  reg_dest = regdest << reg_src |
+| `RS` | `0x0C` | M-Type | reg_dest = regdest >> reg_src |
+| `` | `0x0D` | -Type | |
+| `` | `0x0E` | -Type | |
+| `` | `0x0F` | -Type | |
 
 #### S-Type Instruction
 
@@ -79,7 +84,7 @@ works.
 
 # TODO
 
-- [ ] Figure out how to functionally test modules in systemc.
+- [x] Figure out how to functionally test modules in systemc.
 - [ ] Get a functional simulation done first without worrying about cycle timing accuracy.
   - [ ] Processing Element simulated and tested (Functional)
     - [ ] ALU simulated and tested

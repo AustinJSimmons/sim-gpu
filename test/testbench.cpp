@@ -28,9 +28,6 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
  * test_alu()
  * a function used to test each opcode the ALU
  * might receive.
- * - ADD 0x03
- * - SUB 0x04
- * - MUL 0x05
  * */
 void TestBench::test_alu() {
   // Init inputs
@@ -94,6 +91,13 @@ void TestBench::test_alu() {
       errorCount++;
     }
   }
+
+  // Test AND 0x07
+  // Test OR 0x08
+  // Test NOT 0x09
+  // Test XOR 0x0A
+  // Test LS 0x0B
+  // Test RS 0x0C
 
   sc_stop();
 }
