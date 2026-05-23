@@ -3,6 +3,7 @@
  * individual component.
  **/
 
+// #include "sysc/kernel/sc_module.h"
 #include "systemc"
 using namespace sc_core;
 using namespace sc_dt;
@@ -12,7 +13,10 @@ using namespace sc_dt;
 #ifndef TEST_H
 #define TEST_H
 
-SC_MODULE(testBench) {
+SC_MODULE(TestBench) {
+  int errorCount;
+  std::string testMode;
+
   // Define shared ports of all components being tested.
   sc_signal<bool> clk;
   sc_signal<sc_uint<4>> opcode;
@@ -27,17 +31,7 @@ SC_MODULE(testBench) {
 
   // Define CTOR
 
-  SC_CTOR(testBench) {
-    // Connect component to test
-    alu1 = new ALU("ALU_1");
-    alu1->clk(clk);
-    alu1->input_a(input_a);
-    alu1->input_b(input_b);
-    alu1->result(result);
-
-    // Create a thread to run each test
-    SC_THREAD(test_alu);
-  }
+  TestBench(sc_module_name name, std::string testMode);
 };
 
 #endif // !TEST_H

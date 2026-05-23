@@ -7,7 +7,7 @@
 #include "ALU.h"
 
 void ALU::execute() {
-  sc_int<4> op = opcode.read();
+  sc_uint<4> op = opcode.read();
   sc_int<32> a = input_a.read();
   sc_int<32> b = input_b.read();
 
@@ -29,3 +29,5 @@ void ALU::execute() {
 
   result.write(res);
 }
+
+ALU::~ALU() {}
