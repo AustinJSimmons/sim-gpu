@@ -53,6 +53,18 @@ void TestBench::test_alu() {
       std::cout << "Test Failed 0 + 1 != " << result.read() << std::endl;
       errorCount++;
     }
+
+    input_a.write(-15);
+    input_b.write(20);
+    opcode.write(0x03);
+    wait(10, SC_NS);
+
+    if (result.read() == 5) {
+      std::cout << "Test Passed -15 + 20 = " << result.read() << std::endl;
+    } else {
+      std::cout << "Test Failed -15 + 20 !=" << result.read() << std::endl;
+      errorCount++;
+    }
   }
 
   // Test SUB 0x04
@@ -66,6 +78,19 @@ void TestBench::test_alu() {
       std::cout << "Test Passed 2 - 1 = " << result.read() << std::endl;
     } else {
       std::cout << "Test Failed 2 - 1 != " << result.read() << std::endl;
+      errorCount++;
+    }
+  }
+
+  // Test MUL 0x05
+  if (testMode == "MUL") {
+    input_a.write(0);
+    input_b.write(2147483647); // max twos compliment
+    opcode.write(0x05);
+    wait(10, SC_NS);
+
+    if (result.read() != 0) {
+      std::cout << "Test Failed MUL by 0" << std::endl;
       errorCount++;
     }
   }

@@ -10,3 +10,4 @@ target_link_libraries(test-gpu PUBLIC
 # Add Tests here when added to testbench.
 add_test(NAME ALU_Test_ADD COMMAND test-gpu ADD)
 add_test(NAME ALU_Test_SUB COMMAND test-gpu SUB)
+add_test(NAME ALU_Test_MUL COMMAND test-gpu MUL)
