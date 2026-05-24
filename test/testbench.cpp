@@ -93,6 +93,28 @@ void TestBench::test_alu() {
   }
 
   // Test AND 0x07
+  if (testMode == "ANND") {
+    input_a.write(1);
+    input_b.write(1);
+    opcode.write(0x07);
+    wait(10, SC_NS);
+
+    if (result.read() != 1) {
+      std::cout << "Test Failed 1 AND 1 = 1" << std::endl;
+      errorCount++;
+    }
+
+    input_a.write(1);
+    input_b.write(2);
+    opcode.write(0x07);
+    wait(10, SC_NS);
+
+    if (result.read() != 0) {
+      std::cout << "Test Failed 01 AND 10 = 00" << std::endl;
+      errorCount++;
+    }
+  }
+
   // Test OR 0x08
   // Test NOT 0x09
   // Test XOR 0x0A
