@@ -116,10 +116,74 @@ void TestBench::test_alu() {
   }
 
   // Test OR 0x08
+  if (testMode == "ORR") {
+    input_a.write(1);
+    input_b.write(2);
+    opcode.write(0x08);
+    wait(10, SC_NS);
+
+    if (result.read() != 3) {
+      std::cout << "Test Failed 01 OR 10 = 11" << std::endl;
+      errorCount++;
+    }
+  }
   // Test NOT 0x09
+  if (testMode == "NOTT") {
+    input_a.write(0);
+    opcode.write(0x09);
+    wait(10, SC_NS);
+
+    if (result.read() != -1) {
+      std::cout << "Test Failed NOT 0 = -1 != " << result.read() << std::endl;
+      errorCount++;
+    }
+  }
   // Test XOR 0x0A
+  if (testMode == "XORR") {
+    input_a.write(1);
+    input_b.write(2);
+    opcode.write(0x0A);
+    wait(10, SC_NS);
+
+    if (result.read() != 3) {
+      std::cout << "Test Failed 01 XOR 10 = 11" << std::endl;
+      errorCount++;
+    }
+
+    input_a.write(1);
+    input_b.write(1);
+    opcode.write(0x0A);
+    wait(10, SC_NS);
+
+    if (result.read() != 0) {
+      std::cout << "Test Failed 01 XOR 01 = 11" << std::endl;
+      errorCount++;
+    }
+  }
   // Test LS 0x0B
+  if (testMode == "LS") {
+    input_a.write(1);
+    input_b.write(2);
+    opcode.write(0x0B);
+    wait(10, SC_NS);
+
+    if (result.read() != 4) {
+      std::cout << "Test Failed 0001 << 1 = 0100 = 4" << std::endl;
+      errorCount++;
+    }
+  }
   // Test RS 0x0C
+  if (testMode == "RS") {
+    input_a.write(4);
+    input_b.write(2);
+    opcode.write(0x0C);
+    wait(10, SC_NS);
+
+    if (result.read() != 1) {
+      std::cout << "Test Failed 0100 >> 2 = 0001 = 1" << std::endl;
+      errorCount++;
+    }
+  }
 
   sc_stop();
 }

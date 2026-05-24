@@ -87,7 +87,7 @@ works.
 - [x] Figure out how to functionally test modules in systemc.
 - [ ] Get a functional simulation done first without worrying about cycle timing accuracy.
   - [ ] Processing Element simulated and tested (Functional)
-    - [ ] ALU simulated and tested
+    - [x] ALU simulated and tested
     - [ ] FPU simulated and tested
     - [ ] LSU simulated and tested
     - [ ] SFU ~ If needed
