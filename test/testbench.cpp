@@ -21,7 +21,14 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
   alu1->input_b(input_b);
   alu1->result(result);
 
+  fpu1 = new FPU("FPU_1");
+  fpu1->opcode(opcode);
+  fpu1->src1(input_a);
+  fpu1->src2(input_b);
+  fpu1->result(result);
+
   SC_THREAD(test_alu);
+  SC_THREAD(test_fpu);
 }
 
 /*
@@ -186,4 +193,14 @@ void TestBench::test_alu() {
   }
 
   sc_stop();
+}
+
+void TestBench::test_fpu() {
+  // Test FADD 0x0D
+  // Test FSUB 0x0E
+  // Test FMUL 0x0F
+  // Test FDIV 0x10
+  // Test FMAD 0x11
+  // Test FMIN 0x12
+  // Test FMAX 0x13
 }

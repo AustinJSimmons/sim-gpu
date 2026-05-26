@@ -9,6 +9,7 @@ using namespace sc_core;
 using namespace sc_dt;
 
 #include "ALU.h"
+#include "FPU.h"
 
 #ifndef TEST_H
 #define TEST_H
@@ -25,9 +26,11 @@ SC_MODULE(TestBench) {
 
   // Define instances of components being tested.
   ALU *alu1;
+  FPU *fpu1;
 
   // Define test functions.
   void test_alu();
+  void test_fpu();
 
   // Define CTOR
 
