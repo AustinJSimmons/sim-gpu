@@ -37,30 +37,50 @@ types.
 
 | Mnemonic | Op-code | Instruction Type | Description |
 | :--- | :--- | :--- | :--- |
-| `LOAD` | `0x00` | S-Type | reg_src ->  mem_addr |
-| `STORE` | `0x01` | S-Type | mem_addr -> reg_dest |
-| `MOV` | `0x02` | M-Type | reg_src -> reg_dest |
-| `ADD` | `0x03` | M-Type | reg_dest = reg_dest + reg_src |
-| `SUB` | `0x04` | M-Type | reg_dest = reg_dest - reg_src |
-| `MUL` | `0x05` | M-Type | reg_dest *= reg_src |
-| `JUMP` | `0x06` | J-Type | idk yet but involves mem_addr and predicates |
-| `AND` | `0x07` | M-Type | reg_dest = reg_dest AND reg_src |
-| `OR` | `0x08` | M-Type | reg_dest = reg_dest OR reg_src |
-| `NOT` | `0x09` | M-Type | reg_dest = NOT reg_dest |
-| `XOR` | `0x0A` | M-Type | reg_dest = reg_dest XOR reg_src |
-| `LS` | `0x0B` | M-Type |  reg_dest = regdest << reg_src |
-| `RS` | `0x0C` | M-Type | reg_dest = regdest >> reg_src |
-| `` | `0x0D` | -Type | |
-| `` | `0x0E` | -Type | |
-| `` | `0x0F` | -Type | |
+| `LOAD` | `0x00` | S-Type | (base_reg * offset) = mem_addr -> rd |
+| `STORE` | `0x01` | S-Type | src-> (base_reg * offset) = mem_addr |
+| `MOV` | `0x02` | M-Type | src1 -> rd |
+| `ADD` | `0x03` | M-Type | rd = src1 + src2 |
+| `SUB` | `0x04` | M-Type | rd = src1 - src2 |
+| `MUL` | `0x05` | M-Type | rd *= src2 |
+| `` | `0x06` | -Type | |
+| `AND` | `0x07` | M-Type | rd = src1 AND src2 |
+| `OR` | `0x08` | M-Type | rd = src1 OR src2 |
+| `NOT` | `0x09` | M-Type | rd = NOT rd |
+| `XOR` | `0x0A` | M-Type | rd = src1 XOR src2 |
+| `LS` | `0x0B` | M-Type | rd = src1 << src2 |
+| `RS` | `0x0C` | M-Type | rd = src1 >> src2 |
+| `FADD` | `0x0D` | M-Type | rd = src1 + src2 |
+| `FSUB` | `0x0E` | M-Type | rd = src1 - src2 |
+| `FMUL` | `0x0F` | M-Type | rd = src1 * src2 |
+| `FDIV` | `0x10` | M-Type | rd = src1/src2 |
+| `FMAD` | `0x11` | M-Type | rd = (rd * src1) + src2 |
+| `FMIN` | `0x12` | M-Type | rd = MIN(src1, src2) |
+| `FMAX` | `0x13` | M-Type | rd = MAX(src1, src2) |
+| `` | `0x14` | -Type | |
+| `` | `0x15` | -Type | |
+| `` | `0x16` | -Type | |
+| `` | `0x17` | -Type | |
+| `` | `0x18` | -Type | |
+| `` | `0x19` | -Type | |
+| `` | `0x1A` | -Type | |
+| `` | `0x1B` | -Type | |
+| `` | `0x1C` | -Type | |
+| `` | `0x1D` | -Type | |
+| `` | `0x1E` | -Type | |
+| `` | `0x1F` | -Type | |
+| `` | `0x20` | -Type | |
+| `` | `0x21` | -Type | |
+| `JUMP` | `0x22` | J-Type | idk yet |
 
 #### S-Type Instruction
 
-S-type instructions like LOAD and STORE access memory and either a source or destination
-register.
+S-type instructions like LOAD and STORE access memory using a base register holding a 32bit memory address
+times the immediate offset. This is used to find where to store data from a source register or what to load
+into a destination register.
 
 ![S-Type Bitmap layout](docs/S-Type.svg#gh-light-mode-only)
-![S-Type Bitmap layout](docs/S-type-white.svg#gh-dark-mode-only)
+![S-Type Bitmap layout](docs/S-Type-W.svg#gh-dark-mode-only)
 
 #### M-Type Instruction
 
@@ -69,16 +89,16 @@ some operation on the values within each, storing the output at the destination
 register. MOV just copies the contents of the source to the destination.
 
 ![M-Type Bitmap layout](docs/M-Type.svg#gh-light-mode-only)
-![M-Type Bitmap layout](docs/M-type-white.svg#gh-dark-mode-only)
+![M-Type Bitmap layout](docs/M-Type-W.svg#gh-dark-mode-only)
 
 #### J-Type Instruction
 
-J-Type instructions use predicates and a memory address to jump around in
-memory. Still don't know if this is useful for my GPU simulation yet nor how it
+C-Type instructions use predicates and a memory address to jump around in
+the instruction cache. Still don't know if this is useful for my GPU simulation yet nor how it
 works.
 
-![J-Type Bitmap layout](docs/J-Type.svg#gh-light-mode-only)
-![J-Type Bitmap layout](docs/J-type-white.svg#gh-dark-mode-only)
+![C-Type Bitmap layout](docs/J-Type.svg#gh-light-mode-only)
+![C-Type Bitmap layout](docs/C-Type-W.svg#gh-dark-mode-only)
 
 # Simulation
 
