@@ -75,27 +75,27 @@ types.
 
 #### S-Type Instruction
 
-S-type instructions like LOAD and STORE access memory using a base register holding a 32bit memory address
-times the immediate offset. This is used to find where to store data from a source register or what to load
-into a destination register.
+S-type instructions like LOAD and STORE access memory using a base register
+holding a 32bit memory address times the immediate offset. This is used to find
+where to store data from a source register or what to load into a destination register.
 
 ![S-Type Bitmap layout](docs/S-Type.svg#gh-light-mode-only)
 ![S-Type Bitmap layout](docs/S-Type-W.svg#gh-dark-mode-only)
 
 #### M-Type Instruction
 
-M-type instructions access two registers (source and destination) and performs
+M-type instructions access up to three registers (src1, src2 and rd) and performs
 some operation on the values within each, storing the output at the destination
-register. MOV just copies the contents of the source to the destination.
+register. MOV just copies the contents of src1 to the rd.
 
 ![M-Type Bitmap layout](docs/M-Type.svg#gh-light-mode-only)
 ![M-Type Bitmap layout](docs/M-Type-W.svg#gh-dark-mode-only)
 
-#### J-Type Instruction
+#### C-Type Instruction
 
 C-Type instructions use predicates and a memory address to jump around in
-the instruction cache. Still don't know if this is useful for my GPU simulation yet nor how it
-works.
+the instruction cache. Still don't know if this is useful for my GPU simulation
+yet nor how it works.
 
 ![C-Type Bitmap layout](docs/J-Type.svg#gh-light-mode-only)
 ![C-Type Bitmap layout](docs/C-Type-W.svg#gh-dark-mode-only)
