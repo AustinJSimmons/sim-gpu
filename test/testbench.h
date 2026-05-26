@@ -19,7 +19,7 @@ SC_MODULE(TestBench) {
 
   // Define shared ports of all components being tested.
   sc_signal<bool> clk;
-  sc_signal<sc_uint<4>> opcode;
+  sc_signal<sc_uint<6>> opcode;
   sc_signal<sc_int<32>> input_a, input_b;
   sc_signal<sc_int<32>> result;
 

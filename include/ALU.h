@@ -24,7 +24,7 @@ SC_MODULE(ALU) {
   // For input: At the most basic level I see the ALU needing
   // in_a, in_b for our two input operands and some in_opp for
   // our oppcode being executed as well as a clk input.
-  sc_in<sc_uint<4>> opcode;
+  sc_in<sc_uint<6>> opcode;
   sc_in<sc_int<32>> input_a;
   sc_in<sc_int<32>> input_b;
 
