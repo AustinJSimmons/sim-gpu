@@ -39,7 +39,7 @@ SC_MODULE(ALU) {
   // Constructor prototype
   SC_CTOR(ALU) {
     SC_METHOD(execute);
-    // Must be sensitive to inputs
+    // Must be sensitive to inputs for testing at least
     sensitive << opcode << input_a << input_b;
   }
 

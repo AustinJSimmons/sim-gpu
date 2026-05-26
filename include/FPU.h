@@ -19,14 +19,25 @@
 using namespace sc_core;
 using namespace sc_dt;
 
-SC_MODULE(FPU){
-    // Ports
+SC_MODULE(FPU) {
+  // Ports
+  sc_in<sc_uint<6>> opcode;
+  sc_in<sc_int<32>> src1;
+  sc_in<sc_int<32>> src2;
 
-    // Process prototypes
+  sc_out<sc_int<32>> result;
 
-    // Constructor
+  // Process prototypes
+  void execute();
 
-    // Destructor
+  // Constructor
+  SC_CTOR(FPU) {
+    SC_METHOD(execute);
+    sensitive << opcode << src1 << src2;
+  }
+
+  // Destructor
+  ~FPU();
 };
 
 #endif // !
