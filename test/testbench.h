@@ -20,9 +20,9 @@ SC_MODULE(TestBench) {
 
   // Define shared ports of all components being tested.
   sc_signal<bool> clk;
-  sc_signal<sc_uint<6>> opcode;
-  sc_signal<sc_int<32>> input_a, input_b;
-  sc_signal<sc_int<32>> result;
+  sc_signal<sc_uint<6>> opcode_alu, opcode_fpu;
+  sc_signal<sc_int<32>> a_alu, b_alu, a_fpu, b_fpu;
+  sc_signal<sc_int<32>> result_alu, result_fpu;
 
   // Define instances of components being tested.
   ALU *alu1;
