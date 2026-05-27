@@ -4,7 +4,7 @@
  **/
 
 #include "testbench.h"
-// #include "sysc/kernel/sc_module_name.h"
+#include "helpers.h"
 #include <iostream>
 #include <ostream>
 #include <stdio.h>
@@ -200,14 +200,24 @@ void TestBench::test_alu() {
 void TestBench::test_fpu() {
   // Test FADD 0x0D
   if (testMode == "FADD") {
-    a_fpu.write(0);
-    b_fpu.write(0);
+    float a, b;
+
+    a = 0.1f;
+    b = 0.1f;
+
+    int raw_a = typePunning<int>(a);
+    int raw_b = typePunning<int>(b);
+
+    a_fpu.write(raw_a);
+    b_fpu.write(raw_b);
     opcode_fpu.write(0x0D);
     wait(10, SC_NS);
 
-    if (result_fpu.read() != 0.1) {
-      std::cout << "Test Failed 0.1 + 0.0 != " << result_fpu.read()
-                << std::endl;
+    int raw_res = result_fpu.read();
+    float res = typePunning<float>(raw_res);
+
+    if (res != 0.2f) {
+      std::cout << "Test Failed 0.1 + 0.1 != " << res << std::endl;
       std::cout << "a:" << a_fpu.read() << " b:" << b_fpu.read() << std::endl;
       errorCount++;
     }

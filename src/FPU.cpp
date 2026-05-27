@@ -1,18 +1,16 @@
 #include "FPU.h"
+#include "helpers.h"
 #include <cmath>
-#include <cstring>
 
 void FPU::execute() {
   sc_uint<6> op = opcode.read();
   int a = src1.read();
   int b = src2.read();
 
-  float f_a;
-  float f_b;
+  float f_a = typePunning<float>(a);
+  float f_b = typePunning<float>(b);
   float f_r = 0.0f;
 
-  std::memcpy(&f_a, &a, 4);
-  std::memcpy(&f_b, &b, 4);
   switch (op) {
   case 0x0D:
     f_r = f_a + f_b;
@@ -39,8 +37,7 @@ void FPU::execute() {
     f_r = 0.0f;
   };
 
-  int res;
-  std::memcpy(&res, &f_r, 4);
+  int res = typePunning<int>(f_r);
 
   result.write(res);
 }
