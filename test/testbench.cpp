@@ -197,6 +197,17 @@ void TestBench::test_alu() {
   sc_stop();
 }
 
+bool rough_equal(float a, float b, float eps = 1e-5f) {
+  if (a == b)
+    return true;
+
+  if (std::abs(a - b) < eps) {
+    return true;
+  }
+
+  return false;
+}
+
 void TestBench::test_fpu() {
   // Test FADD 0x0D
   if (testMode == "FADD") {
@@ -216,7 +227,7 @@ void TestBench::test_fpu() {
     int raw_res = result_fpu.read();
     float res = typePunning<float>(raw_res);
 
-    if (res != 0.2f) {
+    if (!::rough_equal(res, 0.2f)) {
       std::cout << "Test Failed 0.1 + 0.1 != " << res << std::endl;
       std::cout << "a:" << a_fpu.read() << " b:" << b_fpu.read() << std::endl;
       errorCount++;
@@ -224,20 +235,135 @@ void TestBench::test_fpu() {
   }
   // Test FSUB 0x0E
   if (testMode == "FSUB") {
+    float a, b;
+    a = 0.1f;
+    b = 0.1f;
+
+    int raw_a = typePunning<int>(a);
+    int raw_b = typePunning<int>(b);
+    a_fpu.write(raw_a);
+    b_fpu.write(raw_b);
+    opcode_fpu.write(0x0E);
+    wait(10, SC_NS);
+
+    int raw_res = result_fpu.read();
+    float res = typePunning<float>(raw_res);
+
+    if (!::rough_equal(res, 0.0f)) {
+      std::cout << "Test Failed 0.1 - 0.1 != " << res << std::endl;
+      errorCount++;
+    }
   }
   // Test FMUL 0x0F
   if (testMode == "FMUL") {
+    float a, b;
+    a = 0.1f;
+    b = 0.1f;
+
+    int raw_a = typePunning<int>(a);
+    int raw_b = typePunning<int>(b);
+    a_fpu.write(raw_a);
+    b_fpu.write(raw_b);
+    opcode_fpu.write(0x0F);
+    wait(10, SC_NS);
+
+    int raw_res = result_fpu.read();
+    float res = typePunning<float>(raw_res);
+    std::cout << "res = " << res << std::endl;
+
+    if (!::rough_equal(res, 0.01)) {
+      std::cout << "Test Failed 0.1 * 0.1 != " << res << std::endl;
+      errorCount++;
+    }
   }
   // Test FDIV 0x10
   if (testMode == "FDIV") {
+    float a, b;
+    a = 0.1f;
+    b = 0.1f;
+
+    int raw_a = typePunning<int>(a);
+    int raw_b = typePunning<int>(b);
+    a_fpu.write(raw_a);
+    b_fpu.write(raw_b);
+    opcode_fpu.write(0x10);
+    wait(10, SC_NS);
+
+    int raw_res = result_fpu.read();
+    float res = typePunning<float>(raw_res);
+
+    if (res != 1.0f) {
+      std::cout << "Test Failed 0.1/0.1 != " << res << std::endl;
+      errorCount++;
+    }
   }
   // Test FMAD 0x11
   if (testMode == "FMAD") {
+    float a, b, r;
+    a = 0.1f;
+    b = 0.1f;
+
+    a_fpu.write(0);
+    b_fpu.write(1);
+    opcode_fpu.write(0x00); // Add to get res = 1
+    wait(10, SC_NS);
+    std::cout << result_fpu.read() << std::endl;
+
+    int raw_a = typePunning<int>(a);
+    int raw_b = typePunning<int>(b);
+    a_fpu.write(raw_a);
+    b_fpu.write(raw_b);
+    opcode_fpu.write(0x11);
+    wait(10, SC_NS);
+
+    int raw_res = result_fpu.read();
+    float res = typePunning<float>(raw_res);
+
+    if (!::rough_equal(res, 0.2f)) {
+      std::cout << "Test Failed (1.0 * 0.1) + 0.1 != " << res << std::endl;
+      errorCount++;
+    }
   }
   // Test FMIN 0x12
   if (testMode == "FMIN") {
+    float a, b;
+    a = 0.01f;
+    b = 0.1f;
+
+    int raw_a = typePunning<int>(a);
+    int raw_b = typePunning<int>(b);
+    a_fpu.write(raw_a);
+    b_fpu.write(raw_b);
+    opcode_fpu.write(0x12);
+    wait(10, SC_NS);
+
+    int raw_res = result_fpu.read();
+    float res = typePunning<float>(raw_res);
+
+    if (!::rough_equal(res, 0.01f)) {
+      std::cout << "Test Failed Min(0.01, 0.1) != " << res << std::endl;
+      errorCount++;
+    }
   }
   // Test FMAX 0x13
   if (testMode == "FMAX") {
+    float a, b;
+    a = 0.01f;
+    b = 0.1f;
+
+    int raw_a = typePunning<int>(a);
+    int raw_b = typePunning<int>(b);
+    a_fpu.write(raw_a);
+    b_fpu.write(raw_b);
+    opcode_fpu.write(0x13);
+    wait(10, SC_NS);
+
+    int raw_res = result_fpu.read();
+    float res = typePunning<float>(raw_res);
+
+    if (!::rough_equal(res, 0.1f)) {
+      std::cout << "Test Failed Max(0.01, 0.1) != " << res << std::endl;
+      errorCount++;
+    }
   }
 }

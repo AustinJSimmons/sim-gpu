@@ -24,8 +24,7 @@ SC_MODULE(FPU) {
   sc_in<sc_uint<6>> opcode;
   sc_in<sc_int<32>> src1;
   sc_in<sc_int<32>> src2;
-
-  sc_out<sc_int<32>> result;
+  sc_inout<sc_int<32>> result;
 
   // Process prototypes
   void execute();

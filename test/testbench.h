@@ -31,6 +31,7 @@ SC_MODULE(TestBench) {
   // Define test functions.
   void test_alu();
   void test_fpu();
+  bool rough_equal();
 
   // Define CTOR
 
