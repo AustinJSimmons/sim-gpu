@@ -7,29 +7,85 @@ about how GPUs actually work on a hardware level. This is an in progress project
 so this README will be messy at times until I understand the general direction to
 go.
 
-### Table-Of-Contents
+## Table-Of-Contents
 
 - [Overview](#overview)
 - [Architecture](#architecture)
   - [GPU Architecture (High Level)](#gpu-architecture)
-  - [Compute Unit Architecture](#compute-unit)
+  - [Compute Unit Architecture](#compute-unit-architecture)
   - [ISA Attempt](#isa-attempt)
 - [Simulation](#simulation)
 - [TODO](#todo)
 
-# Overview
+## Overview
 
-# Architecture
+Since this project is for self-education, the architecture section will
+contain a combination of diagrams and explanations of various parts of
+GPU/computer architecture. Each will be updated as my understanding grows.
+The final goal being a one stop shop for details on how modern GPUs function.
 
-## GPU Architecture
+We'll start with a high level GPU architecture diagram and then move to deeper,
+and deeper levels of granularity. Stopping just short of the logic gate level.
+Where possible I will try and answer the following questions about each component:
+
+1. What does it do?
+2. What are its component parts?
+3. Why does a GPU need it?
+
+Hopefully answering these questions can let any reader (myself included) get a
+deeper understanding of how GPUs work and how their underlying architecture is
+designed.
+
+## Architecture
+
+### GPU Architecture
 
 ![High Level GPU Diagram](docs/High-Level-GPU-Architecture.drawio.svg)
 
-## Compute Unit Architecture
+#### Compute Unit Architecture
+
+Compute units are roughly analogous to CPU cores. They handle parallel
+execution of instructions across many PEs (Processing Elements). In my design
+they contain a Control Unit, register file, L1 Cache, and many PEs. Some modern
+examples would be NVIDEAs SMs (Streaming Multiprocessors) and AMDs CUs (Compute
+Units). While they function essentially like cores in a CPU, the big difference
+in a GPU is the parallel execution of instructions.
+
+##### Control Unit
 
 ![High Level Compute Unit Architecture Diagram](docs/Compute-Unit.drawio.svg)
 
-## ISA Attempt
+The control unit is essentially the brain of each of our Compute Units. Its
+responsible for fetching and decoding program instructions and dispatching these
+to each PE for execution. It contains an L1/Instruction cache, decoder, scheduler
+and dispatcher.
+
+##### Processing Element
+
+Processing Elements are the GPUs workhorse. They receive and execute instructions
+to transform, and move data across registers and memory. It contains (in my design)
+an ALU (Arithmetic Logic Unit), FPU and LSU.
+
+###### ALU
+
+The Arithmetic Logic Unit is responsible for executing arithmetic operations
+(ADD, MUL, SUB) and logic operations (AND, OR, NOT). Its also responsible for
+moving data between registers. Its made up of a series of logic gates
+specialized to perform these actions.
+
+###### FPU
+
+The Floating Point Unit is responsible for executing floating point operations
+(FMUL, FADD, FMAD). Like the ALU its made up of specialized logic gates to perform
+these operations. GPUs need floating point units because a lot of floating point
+math is used in graphics pipelines and AI models.
+
+###### LSU
+
+The Load-Store Unit is responsible for executing all load and store operations
+to and from memory.
+
+### ISA Attempt
 
 For this project I plan to simulate a 32bit instruction set below the table of planned
 supported operators will be a couple bitmaps describing the layout of specific instruction
@@ -100,15 +156,16 @@ yet nor how it works.
 ![C-Type Bitmap layout](docs/J-Type.svg#gh-light-mode-only)
 ![C-Type Bitmap layout](docs/C-Type-W.svg#gh-dark-mode-only)
 
-# Simulation
+## Simulation
 
-# TODO
+## TODO
 
 - [x] Figure out how to functionally test modules in systemc.
-- [ ] Get a functional simulation done first without worrying about cycle timing accuracy.
+- [ ] Get a functional simulation done first without worrying about cycle timing
+      accuracy.
   - [ ] Processing Element simulated and tested (Functional)
     - [x] ALU simulated and tested
-    - [ ] FPU simulated and tested
+    - [x] FPU simulated and tested
     - [ ] LSU simulated and tested
     - [ ] SFU ~ If needed
   - [ ] Compute unit/SM simulated and tested
@@ -124,4 +181,5 @@ yet nor how it works.
     - [ ] L2 Cache
     - [ ] Memory Controller
     - [ ] High-speed Bus?
-- [ ] Implement Cycle Accurate simulation methods after functional Simulation is complete.
+- [ ] Implement Cycle Accurate simulation methods after functional Simulation is
+      complete.
