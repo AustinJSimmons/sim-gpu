@@ -23,8 +23,7 @@ SC_MODULE(LSU) {
   // Ports
   sc_in<sc_uint<6>> opcode;
   sc_in<sc_int<32>> mem_addr;
-  sc_in<sc_int<32>> sr_dr;
-  sc_in<sc_int<16>> offset;
+  sc_inout<sc_int<32>> sr_dr;
 
   // Process prototypes
   void execute();

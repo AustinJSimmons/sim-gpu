@@ -16,6 +16,7 @@ option(BUILD_TESTBENCH "Build testbench suite" OFF)
 add_library(component_lib STATIC
   src/ALU.cpp
   src/FPU.cpp
+  src/PE.cpp
 )
 
 # Add and link SystemC
