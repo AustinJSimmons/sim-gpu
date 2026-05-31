@@ -28,8 +28,14 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
   fpu1->src2(b_fpu);
   fpu1->result(result_fpu);
 
+  pe1 = new PE("PE_1");
+  pe1->dc_in_a(a_pe);
+  pe1->dc_in_b(b_pe);
+  pe1->opcode(opcode_pe);
+  pe1->dc_out(result_pe);
   SC_THREAD(test_alu);
   SC_THREAD(test_fpu);
+  SC_THREAD(test_pe);
 }
 
 /*
@@ -363,6 +369,43 @@ void TestBench::test_fpu() {
 
     if (!::rough_equal(res, 0.1f)) {
       std::cout << "Test Failed Max(0.01, 0.1) != " << res << std::endl;
+      errorCount++;
+    }
+  }
+}
+
+void TestBench::test_pe() {
+  if (testMode == "PADD") {
+    a_pe.write(12);
+    b_pe.write(30);
+    opcode_pe.write(0x03);
+    wait(30, SC_NS);
+
+    if (result_pe.read() != 42) {
+      std::cout << "Test Failed 12 + 30 = 42 != " << result_pe.read()
+                << std::endl;
+      errorCount++;
+    }
+  }
+
+  if (testMode == "PFAD") {
+    float a, b;
+    a = 12.30f;
+    b = 30.12f;
+
+    int raw_a = typePunning<int>(a);
+    int raw_b = typePunning<int>(b);
+
+    a_pe.write(raw_a);
+    b_pe.write(raw_b);
+    opcode_pe.write(0x0D);
+    wait(30, SC_NS);
+
+    int raw_res = result_pe.read();
+    float res = typePunning<float>(raw_res);
+
+    if (!::rough_equal(res, 42.42f)) {
+      std::cout << "Test Faild 12.30 + 30.12 = 42.42 != " << res << std::endl;
       errorCount++;
     }
   }

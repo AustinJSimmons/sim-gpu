@@ -17,11 +17,15 @@ void PE::demux() {
     fpu_in_a.write(a);
     fpu_in_b.write(b);
     fpu_op.write(op);
+
+    dc_out = fpu_result.read();
     break;
   default:
     alu_in_a.write(a);
     alu_in_b.write(b);
     alu_op.write(op);
+
+    dc_out = alu_result.read();
     break;
   }
 }
