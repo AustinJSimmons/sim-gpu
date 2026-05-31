@@ -17,16 +17,22 @@ void PE::demux() {
     fpu_in_a.write(a);
     fpu_in_b.write(b);
     fpu_op.write(op);
-
-    dc_out = fpu_result.read();
+    demux_is_fpu.write(true);
     break;
   default:
     alu_in_a.write(a);
     alu_in_b.write(b);
     alu_op.write(op);
-
-    dc_out = alu_result.read();
+    demux_is_fpu.write(false);
     break;
+  }
+}
+
+void PE::mux() {
+  if (demux_is_fpu.read()) {
+    dc_out.write(fpu_result.read());
+  } else {
+    dc_out.write(alu_result.read());
   }
 }
 

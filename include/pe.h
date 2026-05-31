@@ -36,8 +36,10 @@ SC_MODULE(PE) {
   sc_signal<sc_int<32>> fpu_in_a;
   sc_signal<sc_int<32>> fpu_in_b;
   sc_signal<sc_int<32>> fpu_result;
+  sc_signal<bool> demux_is_fpu;
 
   void demux();
+  void mux(); // mux?
 
   // 3. Child Modules (Internal Components)
   ALU *alu;
@@ -58,6 +60,9 @@ SC_MODULE(PE) {
 
     SC_METHOD(demux);
     sensitive << opcode << dc_in_a << dc_in_b;
+
+    SC_METHOD(mux);
+    sensitive << fpu_result << alu_result;
   }
 
   // Destructor prototype
