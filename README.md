@@ -80,10 +80,13 @@ The Floating Point Unit is responsible for executing floating point operations
 these operations. GPUs need floating point units because a lot of floating point
 math is used in graphics pipelines and AI models.
 
-###### LSU
+##### Register File
 
-The Load-Store Unit is responsible for executing all load and store operations
-to and from memory.
+In our simulation, we have an instruction set that assigns 5 bits per register in
+an instruction. Thus we have $2^5 = 32$ addressable registers per thread.
+We'll call these R0 -> R31. In my first iteration we just want to execute a single
+thread on a single PE and so our register file will only have 32 addressable registers
+that can be accessed by the thread. This will be scaled up to 32 threads.
 
 ### ISA Attempt
 
