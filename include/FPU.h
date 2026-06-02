@@ -21,9 +21,10 @@ using namespace sc_dt;
 
 SC_MODULE(FPU) {
   // Ports
-  sc_in<sc_uint<6>> opcode;
+  sc_in<sc_bv<4>> op_switch;
   sc_in<sc_int<32>> src1;
   sc_in<sc_int<32>> src2;
+  sc_in<sc_int<32>> src3; // for FMAD
   sc_inout<sc_int<32>> result;
 
   // Process prototypes
@@ -32,7 +33,7 @@ SC_MODULE(FPU) {
   // Constructor
   SC_CTOR(FPU) {
     SC_METHOD(execute);
-    sensitive << opcode << src1 << src2;
+    sensitive << op_switch << src1 << src2;
   }
 
   // Destructor

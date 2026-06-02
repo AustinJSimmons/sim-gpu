@@ -17,21 +17,23 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
     : sc_module(name), testMode(testMode) {
   errorCount = 0;
   alu1 = new ALU("ALU_1");
-  alu1->opcode(opcode_alu);
+  alu1->op_switch(opcode_alu);
   alu1->input_a(a_alu);
   alu1->input_b(b_alu);
   alu1->result(result_alu);
 
   fpu1 = new FPU("FPU_1");
-  fpu1->opcode(opcode_fpu);
+  fpu1->op_switch(opcode_fpu);
   fpu1->src1(a_fpu);
   fpu1->src2(b_fpu);
+  fpu1->src3(c_fpu);
   fpu1->result(result_fpu);
 
   pe1 = new PE("PE_1");
+  pe1->is_fpu_switch(is_fpu);
   pe1->dc_in_a(a_pe);
   pe1->dc_in_b(b_pe);
-  pe1->opcode(opcode_pe);
+  pe1->dc_in_c(c_pe);
   pe1->dc_out(result_pe);
   SC_THREAD(test_alu);
   SC_THREAD(test_fpu);
@@ -47,15 +49,15 @@ void TestBench::test_alu() {
   // Init inputs
   a_alu.write(0);
   b_alu.write(0);
-  opcode_alu.write(0x00);
+  opcode_alu.write(0b0000);
   wait(10, SC_NS);
 
-  // Test ADD 0x03
+  // Test ADD 0b0001
   if (testMode == "ADD") {
 
     a_alu.write(0);
     b_alu.write(1);
-    opcode_alu.write(0x03);
+    opcode_alu.write(0b0001);
     wait(10, SC_NS);
 
     if (result_alu.read() == 1) {
@@ -67,7 +69,7 @@ void TestBench::test_alu() {
 
     a_alu.write(-15);
     b_alu.write(20);
-    opcode_alu.write(0x03);
+    opcode_alu.write(0b0001);
     wait(10, SC_NS);
 
     if (result_alu.read() == 5) {
@@ -78,11 +80,11 @@ void TestBench::test_alu() {
     }
   }
 
-  // Test SUB 0x04
+  // Test SUB 0b0010
   if (testMode == "SUB") {
     a_alu.write(2);
     b_alu.write(1);
-    opcode_alu.write(0x04);
+    opcode_alu.write(0b0010);
     wait(10, SC_NS);
 
     if (result_alu.read() == 1) {
@@ -93,11 +95,11 @@ void TestBench::test_alu() {
     }
   }
 
-  // Test MUL 0x05
+  // Test MUL 0b0011
   if (testMode == "MUL") {
     a_alu.write(0);
     b_alu.write(2147483647); // max twos compliment
-    opcode_alu.write(0x05);
+    opcode_alu.write(0b0011);
     wait(10, SC_NS);
 
     if (result_alu.read() != 0) {
@@ -106,11 +108,11 @@ void TestBench::test_alu() {
     }
   }
 
-  // Test AND 0x07
+  // Test AND 0b0100
   if (testMode == "ANND") {
     a_alu.write(1);
     b_alu.write(1);
-    opcode_alu.write(0x07);
+    opcode_alu.write(0b0100);
     wait(10, SC_NS);
 
     if (result_alu.read() != 1) {
@@ -120,7 +122,7 @@ void TestBench::test_alu() {
 
     a_alu.write(1);
     b_alu.write(2);
-    opcode_alu.write(0x07);
+    opcode_alu.write(0b0100);
     wait(10, SC_NS);
 
     if (result_alu.read() != 0) {
@@ -129,11 +131,11 @@ void TestBench::test_alu() {
     }
   }
 
-  // Test OR 0x08
+  // Test OR 0b0101
   if (testMode == "ORR") {
     a_alu.write(1);
     b_alu.write(2);
-    opcode_alu.write(0x08);
+    opcode_alu.write(0b0101);
     wait(10, SC_NS);
 
     if (result_alu.read() != 3) {
@@ -141,10 +143,10 @@ void TestBench::test_alu() {
       errorCount++;
     }
   }
-  // Test NOT 0x09
+  // Test NOT 0b0110
   if (testMode == "NOTT") {
     a_alu.write(0);
-    opcode_alu.write(0x09);
+    opcode_alu.write(0b0110);
     wait(10, SC_NS);
 
     if (result_alu.read() != -1) {
@@ -153,11 +155,11 @@ void TestBench::test_alu() {
       errorCount++;
     }
   }
-  // Test XOR 0x0A
+  // Test XOR 0b0111
   if (testMode == "XORR") {
     a_alu.write(1);
     b_alu.write(2);
-    opcode_alu.write(0x0A);
+    opcode_alu.write(0b0111);
     wait(10, SC_NS);
 
     if (result_alu.read() != 3) {
@@ -167,7 +169,7 @@ void TestBench::test_alu() {
 
     a_alu.write(1);
     b_alu.write(1);
-    opcode_alu.write(0x0A);
+    opcode_alu.write(0b0111);
     wait(10, SC_NS);
 
     if (result_alu.read() != 0) {
@@ -175,11 +177,11 @@ void TestBench::test_alu() {
       errorCount++;
     }
   }
-  // Test LS 0x0B
+  // Test LS 0b1000
   if (testMode == "LS") {
     a_alu.write(1);
     b_alu.write(2);
-    opcode_alu.write(0x0B);
+    opcode_alu.write(0b1000);
     wait(10, SC_NS);
 
     if (result_alu.read() != 4) {
@@ -187,11 +189,11 @@ void TestBench::test_alu() {
       errorCount++;
     }
   }
-  // Test RS 0x0C
+  // Test RS 0b1001
   if (testMode == "RS") {
     a_alu.write(4);
     b_alu.write(2);
-    opcode_alu.write(0x0C);
+    opcode_alu.write(0b1001);
     wait(10, SC_NS);
 
     if (result_alu.read() != 1) {
@@ -215,7 +217,7 @@ bool rough_equal(float a, float b, float eps = 1e-5f) {
 }
 
 void TestBench::test_fpu() {
-  // Test FADD 0x0D
+  // Test FADD 0b0001
   if (testMode == "FADD") {
     float a, b;
 
@@ -227,7 +229,7 @@ void TestBench::test_fpu() {
 
     a_fpu.write(raw_a);
     b_fpu.write(raw_b);
-    opcode_fpu.write(0x0D);
+    opcode_fpu.write(0b0001);
     wait(10, SC_NS);
 
     int raw_res = result_fpu.read();
@@ -239,7 +241,7 @@ void TestBench::test_fpu() {
       errorCount++;
     }
   }
-  // Test FSUB 0x0E
+  // Test FSUB 0b0010
   if (testMode == "FSUB") {
     float a, b;
     a = 0.1f;
@@ -249,7 +251,7 @@ void TestBench::test_fpu() {
     int raw_b = typePunning<int>(b);
     a_fpu.write(raw_a);
     b_fpu.write(raw_b);
-    opcode_fpu.write(0x0E);
+    opcode_fpu.write(0b0010);
     wait(10, SC_NS);
 
     int raw_res = result_fpu.read();
@@ -260,7 +262,7 @@ void TestBench::test_fpu() {
       errorCount++;
     }
   }
-  // Test FMUL 0x0F
+  // Test FMUL 0b0011
   if (testMode == "FMUL") {
     float a, b;
     a = 0.1f;
@@ -270,7 +272,7 @@ void TestBench::test_fpu() {
     int raw_b = typePunning<int>(b);
     a_fpu.write(raw_a);
     b_fpu.write(raw_b);
-    opcode_fpu.write(0x0F);
+    opcode_fpu.write(0b0011);
     wait(10, SC_NS);
 
     int raw_res = result_fpu.read();
@@ -282,7 +284,7 @@ void TestBench::test_fpu() {
       errorCount++;
     }
   }
-  // Test FDIV 0x10
+  // Test FDIV 0b0100
   if (testMode == "FDIV") {
     float a, b;
     a = 0.1f;
@@ -292,7 +294,7 @@ void TestBench::test_fpu() {
     int raw_b = typePunning<int>(b);
     a_fpu.write(raw_a);
     b_fpu.write(raw_b);
-    opcode_fpu.write(0x10);
+    opcode_fpu.write(0b0100);
     wait(10, SC_NS);
 
     int raw_res = result_fpu.read();
@@ -303,23 +305,20 @@ void TestBench::test_fpu() {
       errorCount++;
     }
   }
-  // Test FMAD 0x11
+  // Test FMAD 0b0101
   if (testMode == "FMAD") {
-    float a, b, r;
-    a = 0.1f;
+    float a, b, c;
+    a = 1.0f;
     b = 0.1f;
-
-    a_fpu.write(0);
-    b_fpu.write(1);
-    opcode_fpu.write(0x00); // Add to get res = 1
-    wait(10, SC_NS);
-    std::cout << result_fpu.read() << std::endl;
+    c = 0.1f;
 
     int raw_a = typePunning<int>(a);
     int raw_b = typePunning<int>(b);
+    int raw_c = typePunning<int>(c);
     a_fpu.write(raw_a);
     b_fpu.write(raw_b);
-    opcode_fpu.write(0x11);
+    c_fpu.write(raw_c);
+    opcode_fpu.write(0b0101);
     wait(10, SC_NS);
 
     int raw_res = result_fpu.read();
@@ -330,7 +329,7 @@ void TestBench::test_fpu() {
       errorCount++;
     }
   }
-  // Test FMIN 0x12
+  // Test FMIN 0b0110
   if (testMode == "FMIN") {
     float a, b;
     a = 0.01f;
@@ -340,7 +339,7 @@ void TestBench::test_fpu() {
     int raw_b = typePunning<int>(b);
     a_fpu.write(raw_a);
     b_fpu.write(raw_b);
-    opcode_fpu.write(0x12);
+    opcode_fpu.write(0b0110);
     wait(10, SC_NS);
 
     int raw_res = result_fpu.read();
@@ -351,7 +350,7 @@ void TestBench::test_fpu() {
       errorCount++;
     }
   }
-  // Test FMAX 0x13
+  // Test FMAX 0b0111
   if (testMode == "FMAX") {
     float a, b;
     a = 0.01f;
@@ -361,7 +360,7 @@ void TestBench::test_fpu() {
     int raw_b = typePunning<int>(b);
     a_fpu.write(raw_a);
     b_fpu.write(raw_b);
-    opcode_fpu.write(0x13);
+    opcode_fpu.write(0b0111);
     wait(10, SC_NS);
 
     int raw_res = result_fpu.read();
@@ -376,9 +375,10 @@ void TestBench::test_fpu() {
 
 void TestBench::test_pe() {
   if (testMode == "PADD") {
+    is_fpu.write(false);
     a_pe.write(12);
     b_pe.write(30);
-    opcode_pe.write(0x03);
+    opcode_pe.write(0b0001);
     wait(30, SC_NS);
 
     if (result_pe.read() != 42) {
@@ -396,9 +396,10 @@ void TestBench::test_pe() {
     int raw_a = typePunning<int>(a);
     int raw_b = typePunning<int>(b);
 
+    is_fpu.write(true);
     a_pe.write(raw_a);
     b_pe.write(raw_b);
-    opcode_pe.write(0x0D);
+    opcode_pe.write(0b0001);
     wait(30, SC_NS);
 
     int raw_res = result_pe.read();
