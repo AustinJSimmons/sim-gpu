@@ -7,3 +7,26 @@
  *  Unit based on decoded instructions.
  *  -
  * */
+
+#include "cu_ctu_decoder.h"
+#include "cu_ctu_dispatcher.h"
+#include "cu_ctu_instruction_cache.h"
+#include "cu_ctu_scheduler.h"
+
+#include "systemc"
+using namespace sc_core;
+using namespace sc_dt;
+
+#ifndef CU_CTU_H
+#define CU_CTU_H
+
+SC_MODULE(CU_CTU) {
+
+  SC_CTOR(CU_CTU){
+
+  };
+
+  ~CU_CTU();
+};
+
+#endif // CU
