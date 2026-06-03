@@ -51,6 +51,19 @@ examples would be NVIDEAs SMs (Streaming Multiprocessors) and AMDs CUs (Compute
 Units). While they function essentially like cores in a CPU, the big difference
 in a GPU is the parallel execution of instructions.
 
+##### Control Flow of the CU
+
+1. Program (maybe warp level?) instructions are written to CU control unit
+   instruction cache.
+2. The decoder fetches instructions from the instruction cache.
+3. The decoder decodes these instructions into hardware control signal
+   instructions.
+4. These instructions are put in a FiFo (or something similar) queue which,
+   accessible by the dispatcher.
+5. The dispatcher sends out the control signal instructions to the scheduler
+   which decides what resources are available to carry out said instructions.
+6. The scheduler then informs the dispatcher where to send the in hardware.
+
 ##### Control Unit
 
 ![High Level Compute Unit Architecture Diagram](docs/Compute-Unit.drawio.svg)

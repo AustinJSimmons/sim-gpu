@@ -21,7 +21,8 @@ SC_MODULE(RFB) {
   // Define the actual physical RFB structure
   // This gives us MAX_THREADS * MAX_REG_PER_THREAD total registers
   // in our register file.
-  sc_signal<sc_int<32>> physical_rf[MAX_THREADS][MAX_REG_PER_THREAD];
+  sc_signal<sc_int<32>> physical_rf[MAX_THREADS]
+                                   [MAX_REG_PER_THREAD]; // Register array
 
   // Ports: How do we connect to the PEs and how do we connect to the
   // LSU/Memory?
@@ -32,6 +33,9 @@ SC_MODULE(RFB) {
   // How what is the output input bandwidth per bank?
   // How do we deal with bank collisions?
   // How do banks know what data goes to which PE?
+
+  sc_in<sc_int<32>> bank_input;
+  sc_out<sc_int<32>> bank_out;
 
   SC_CTOR(RFB) {}
 
