@@ -25,7 +25,7 @@ template <int BANK_DEPTH, int NUM_THREADS> SC_MODULE(RFB) {
   // Control signals for selecting thread specific registers.
   sc_in<bool> clk;
 
-  sc_in<sc_bv<NUM_THREADS>> write_mask;
+  sc_in<sc_bv<NUM_THREADS>> write_mask; // Only writes to threads needing writes
   sc_in<sc_uint<BANK_DEPTH>> write_address; // Row address
   sc_in<bool> write_enable;
   sc_in<sc_int<32>> bank_in[NUM_THREADS];
