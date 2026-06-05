@@ -40,7 +40,7 @@ SC_MODULE(TestBench) {
   ALU *alu1;
   FPU *fpu1;
   PE *pe1;
-  RF<4, 32, 4> *rf0;
+  RF<32, 4> *rf0;
 
   // Define test functions.
   void test_alu();

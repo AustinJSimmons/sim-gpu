@@ -16,12 +16,11 @@
 using namespace sc_core;
 using namespace sc_dt;
 
-template <int NUM_BANKS, int REG_PER_THREAD, int NUM_THREADS> SC_MODULE(RF) {
-  // Need to calc the DEPTH of our banks at compile time
-  static constexpr int BANK_DEPTH = REG_PER_THREAD / NUM_BANKS;
+template <int REG_PER_THREAD, int NUM_THREADS> SC_MODULE(RF) {
+  //
 
   // Need a pointer instantiated to hold our array of banks
-  RFB<BANK_DEPTH, NUM_THREADS> *banks[NUM_BANKS];
+  RFB<REG_PER_THREAD, NUM_THREADS> *banks[NUM_THREADS];
 
   // Ports
   sc_in<bool> clk;
@@ -33,54 +32,47 @@ template <int NUM_BANKS, int REG_PER_THREAD, int NUM_THREADS> SC_MODULE(RF) {
   sc_out<sc_int<32>> global_read_data_out[NUM_THREADS];
 
   // Internal Signals (wires)
-  sc_signal<bool> bank_wr_e[NUM_BANKS];
-  sc_signal<sc_int<32>> bank_outputs[NUM_BANKS][NUM_THREADS];
-  sc_signal<sc_uint<BANK_DEPTH>> read_row;
-  sc_signal<sc_uint<BANK_DEPTH>> write_row;
+  sc_signal<bool> bank_we[NUM_THREADS];
+  sc_signal<sc_int<32>> bank_outputs[NUM_THREADS];
+  sc_signal<sc_uint<REG_PER_THREAD>> read_addr;
+  sc_signal<sc_uint<REG_PER_THREAD>> write_addr;
 
   // Process
   void decode_mux() {
-    read_row.write(global_read_addr.read() >> 2);
-    write_row.write(global_write_addr.read() >> 2);
-    for (int i = 0; i < NUM_BANKS; i++) {
-      if (global_write_addr.read() % NUM_BANKS == i) {
-        bank_wr_e[i].write(global_write_enable.read());
+    read_addr.write(global_read_addr.read());
+    write_addr.write(global_write_addr.read());
+    for (int i = 0; i < NUM_THREADS; i++) {
+      if (global_write_enable.read() == global_write_mask.read().bit(i)) {
+        bank_we[i].write(global_write_enable.read());
       } else {
-        bank_wr_e[i].write(false);
+        bank_we[i].write(false);
       }
 
-      if (global_read_addr.read() % NUM_BANKS == i) {
-        for (int j = 0; j < NUM_THREADS; j++) {
-          global_read_data_out[j].write(bank_outputs[i][j].read());
-        }
-      }
+      global_read_data_out[i].write(bank_outputs[i].read());
     }
   }
 
   SC_CTOR(RF) {
     // Need some way to instantiate the number of banks
-    for (int i = 0; i < NUM_BANKS; i++) {
+    // number of banks = number of threads per CU in SIMT
+    for (int i = 0; i < NUM_THREADS; i++) {
       std::string bank = "bank_" + std::to_string(i);
-      banks[i] = new RFB<BANK_DEPTH, NUM_THREADS>(bank.c_str());
+      banks[i] = new RFB<REG_PER_THREAD, NUM_THREADS>(bank.c_str());
 
       banks[i]->clk(this->clk);
-      banks[i]->write_address(write_row);
-      banks[i]->read_address(read_row);
+      banks[i]->write_address(write_addr);
+      banks[i]->read_address(read_addr);
       banks[i]->write_mask(this->global_write_mask);
-      banks[i]->write_enable(bank_wr_e[i]);
+      banks[i]->write_enable(bank_we[i]);
 
-      for (int j = 0; j < NUM_THREADS; j++) {
-        banks[i]->bank_in[j](this->global_write_data_in[j]);
-        banks[i]->bank_out[j](bank_outputs[i][j]);
-      }
+      banks[i]->bank_in(this->global_write_data_in[i]);
+      banks[i]->bank_out(bank_outputs[i]);
     }
 
     SC_METHOD(decode_mux);
     sensitive << global_write_addr << global_read_addr << global_write_enable;
-    for (int i = 0; i < NUM_BANKS; i++) {
-      for (int j = 0; j < NUM_THREADS; j++) {
-        sensitive << bank_outputs[i][j];
-      }
+    for (int i = 0; i < NUM_THREADS; i++) {
+      sensitive << bank_outputs[i];
     }
   }
 

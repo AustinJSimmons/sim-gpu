@@ -38,7 +38,7 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
   pe1->dc_in_c(c_pe);
   pe1->dc_out(result_pe);
 
-  rf0 = new RF<4, 32, 4>("RF_0");
+  rf0 = new RF<32, 4>("RF_0");
   rf0->global_read_addr(global_read_addr);
   rf0->global_write_addr(global_write_addr);
   rf0->global_write_enable(global_write_enable);
@@ -68,7 +68,6 @@ void TestBench::test_rf() {
     global_write_mask.write(mask);
     for (int i = 0; i < 4; i++) {
       global_write_data_in[i].write(data_in[i]);
-      std::cout << global_read_data_out[i].read() << std::endl;
     }
     wait();
     wait();

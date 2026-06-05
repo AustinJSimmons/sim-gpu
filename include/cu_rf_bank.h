@@ -13,35 +13,32 @@
 using namespace sc_core;
 using namespace sc_dt;
 
-template <int BANK_DEPTH, int NUM_THREADS> SC_MODULE(RFB) {
+template <int REG_PER_THREAD, int NUM_THREADS> SC_MODULE(RFB) {
   // Register array should be a flat 1D array of rows to represent
   // the hardware reality.
   // BANK_DEPTH gives us the number registers (rows) each bank will
   // be responsible for.
   // NUM_THREADS determines the width of our rows so that threads have
   // their own 32 bit registers to access.
-  sc_signal<sc_int<32>> mem_array[BANK_DEPTH][NUM_THREADS];
+  sc_int<32> mem_array[REG_PER_THREAD];
 
   // Control signals for selecting thread specific registers.
   sc_in<bool> clk;
 
   sc_in<sc_bv<NUM_THREADS>> write_mask; // Only writes to threads needing writes
-  sc_in<sc_uint<BANK_DEPTH>> write_address; // Row address
+  sc_in<sc_uint<REG_PER_THREAD>> write_address; // Register addr
   sc_in<bool> write_enable;
-  sc_in<sc_int<32>> bank_in[NUM_THREADS];
+  sc_in<sc_int<32>> bank_in;
 
-  sc_in<sc_uint<BANK_DEPTH>> read_address;
-  sc_out<sc_int<32>> bank_out[NUM_THREADS];
-
+  sc_in<sc_uint<REG_PER_THREAD>> read_address;
+  sc_out<sc_int<32>> bank_out;
   // Processes
   void execute() {
     for (int i = 0; i < NUM_THREADS; i++) {
       // Always dump reads
-      bank_out[i].write(mem_array[read_address.read()][i]);
+      bank_out.write(mem_array[read_address.read()]);
       if (write_enable.read()) {
-        if (write_mask.read()[i]) {
-          mem_array[write_address.read()][i].write(bank_in[i].read());
-        }
+        mem_array[write_address.read()] = bank_in.read();
       }
     }
   }
