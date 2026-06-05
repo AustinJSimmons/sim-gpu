@@ -5,6 +5,7 @@
 
 #include "testbench.h"
 #include "helpers.h"
+#include "sysc/kernel/sc_time.h"
 #include <iostream>
 #include <ostream>
 #include <stdio.h>
@@ -15,6 +16,7 @@
  */
 TestBench::TestBench(sc_module_name name, std::string testMode)
     : sc_module(name), testMode(testMode) {
+
   errorCount = 0;
   alu1 = new ALU("ALU_1");
   alu1->op_switch(opcode_alu);
@@ -35,9 +37,56 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
   pe1->dc_in_b(b_pe);
   pe1->dc_in_c(c_pe);
   pe1->dc_out(result_pe);
+
+  rf0 = new RF<4, 32, 4>("RF_0");
+  rf0->global_read_addr(global_read_addr);
+  rf0->global_write_addr(global_write_addr);
+  rf0->global_write_enable(global_write_enable);
+  rf0->global_write_mask(global_write_mask);
+  for (int i = 0; i < 4; i++) {
+    rf0->global_read_data_out[i](global_read_data_out[i]);
+    rf0->global_write_data_in[i](global_write_data_in[i]);
+  }
+  rf0->clk(this->clk);
+
   SC_THREAD(test_alu);
   SC_THREAD(test_fpu);
   SC_THREAD(test_pe);
+  SC_THREAD(test_rf);
+  sensitive << clk.pos();
+}
+
+void TestBench::test_rf() {
+  if (testMode == "RF") {
+    global_write_enable.write(true);
+    global_write_addr.write(13);
+    global_read_addr.write(13);
+
+    sc_int<32> data_in[4] = {1, 4, 2, 7};
+    sc_bv<4> mask = 0b1111;
+
+    global_write_mask.write(mask);
+    for (int i = 0; i < 4; i++) {
+      global_write_data_in[i].write(data_in[i]);
+      std::cout << global_read_data_out[i].read() << std::endl;
+    }
+    wait();
+    wait();
+
+    global_write_enable.write(false);
+    global_read_addr.write(13);
+
+    wait();
+    wait();
+    for (int i = 0; i < 4; i++) {
+      if (global_read_data_out[i].read() != data_in[i]) {
+        errorCount++;
+        std::cout << global_read_data_out[i].read() << " != " << data_in[i]
+                  << std::endl;
+      }
+    }
+  }
+  sc_stop();
 }
 
 /*

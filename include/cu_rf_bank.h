@@ -38,7 +38,6 @@ template <int BANK_DEPTH, int NUM_THREADS> SC_MODULE(RFB) {
     for (int i = 0; i < NUM_THREADS; i++) {
       // Always dump reads
       bank_out[i].write(mem_array[read_address.read()][i]);
-
       if (write_enable.read()) {
         if (write_mask.read()[i]) {
           mem_array[write_address.read()][i].write(bank_in[i].read());
@@ -52,7 +51,7 @@ template <int BANK_DEPTH, int NUM_THREADS> SC_MODULE(RFB) {
     sensitive << clk.pos();
   }
 
-  ~RFB();
+  ~RFB(){};
 };
 
 #endif

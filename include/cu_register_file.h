@@ -21,7 +21,7 @@ template <int NUM_BANKS, int REG_PER_THREAD, int NUM_THREADS> SC_MODULE(RF) {
   static constexpr int BANK_DEPTH = REG_PER_THREAD / NUM_BANKS;
 
   // Need a pointer instantiated to hold our array of banks
-  sc_vector<RFB<BANK_DEPTH, NUM_THREADS>> banks[NUM_BANKS];
+  RFB<BANK_DEPTH, NUM_THREADS> *banks[NUM_BANKS];
 
   // Ports
   sc_in<bool> clk;
@@ -61,12 +61,12 @@ template <int NUM_BANKS, int REG_PER_THREAD, int NUM_THREADS> SC_MODULE(RF) {
     // Need some way to instantiate the number of banks
     for (int i = 0; i < NUM_BANKS; i++) {
       std::string bank = "bank_" + std::to_string(i);
-      banks[i] = new RFB<BANK_DEPTH, NUM_THREADS>(bank);
+      banks[i] = new RFB<BANK_DEPTH, NUM_THREADS>(bank.c_str());
 
       banks[i]->clk(this->clk);
       banks[i]->write_address(write_row);
       banks[i]->read_address(read_row);
-      banks[i]->write_mask(global_write_mask);
+      banks[i]->write_mask(this->global_write_mask);
       banks[i]->write_enable(bank_wr_e[i]);
 
       for (int j = 0; j < NUM_THREADS; j++) {
@@ -77,9 +77,14 @@ template <int NUM_BANKS, int REG_PER_THREAD, int NUM_THREADS> SC_MODULE(RF) {
 
     SC_METHOD(decode_mux);
     sensitive << global_write_addr << global_read_addr << global_write_enable;
+    for (int i = 0; i < NUM_BANKS; i++) {
+      for (int j = 0; j < NUM_THREADS; j++) {
+        sensitive << bank_outputs[i][j];
+      }
+    }
   }
 
-  ~RF();
+  ~RF(){};
 };
 
 #endif
