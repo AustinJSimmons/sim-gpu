@@ -11,7 +11,7 @@
 using namespace sc_core;
 using namespace sc_dt;
 
-template <int NUM_OC_UNITS>
+template <int NUM_OC_UNITS, int NUM_THREADS>
 SC_MODULE(OC){
 
 };

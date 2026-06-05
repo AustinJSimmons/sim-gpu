@@ -23,7 +23,7 @@ SC_MODULE(TestBench) {
   sc_in<bool> clk;
 
   // Define shared ports of all components being tested.
-  sc_signal<bool> is_fpu;
+  sc_signal<bool> is_fpu, is_active_pe, write_out_enable;
   sc_signal<sc_bv<4>> opcode_alu, opcode_fpu, opcode_pe;
   sc_signal<sc_int<32>> a_alu, b_alu, a_fpu, b_fpu, c_fpu, a_pe, b_pe, c_pe;
   sc_signal<sc_int<32>> result_alu, result_fpu, result_pe;

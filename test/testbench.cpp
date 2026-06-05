@@ -33,10 +33,13 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
 
   pe1 = new PE("PE_1");
   pe1->is_fpu_switch(is_fpu);
+  pe1->active_mask_bit(is_active_pe);
+  pe1->opcode_in(opcode_pe);
   pe1->dc_in_a(a_pe);
   pe1->dc_in_b(b_pe);
   pe1->dc_in_c(c_pe);
   pe1->dc_out(result_pe);
+  pe1->write_enable_out(write_out_enable);
 
   rf0 = new RF<32, 4>("RF_0");
   rf0->global_read_addr(global_read_addr);
@@ -424,6 +427,7 @@ void TestBench::test_fpu() {
 void TestBench::test_pe() {
   if (testMode == "PADD") {
     is_fpu.write(false);
+    is_active_pe.write(true);
     a_pe.write(12);
     b_pe.write(30);
     opcode_pe.write(0b0001);

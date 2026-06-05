@@ -2,28 +2,33 @@
 
 void PE::demux() {
   // Check opcode decide where to send PE internal signals
-  bool is_fpu = is_fpu_switch.read();
-  sc_int<32> a = dc_in_a.read();
-  sc_int<32> b = dc_in_b.read();
-  sc_int<32> c = dc_in_c.read();
+  fpu_in_a.write(dc_in_a.read());
+  fpu_in_b.write(dc_in_b.read());
+  fpu_in_c.write(dc_in_c.read());
 
-  if (is_fpu) {
-    fpu_in_a.write(a);
-    fpu_in_b.write(b);
-    fpu_in_c.write(c);
-    demux_is_fpu.write(is_fpu);
+  alu_in_a.write(dc_in_a.read());
+  alu_in_b.write(dc_in_b.read());
+
+  if (is_fpu_switch.read()) {
+    fpu_op.write(opcode_in.read());
+    alu_op.write(0b0000);
   } else {
-    alu_in_a.write(a);
-    alu_in_b.write(b);
-    demux_is_fpu.write(is_fpu);
+    fpu_op.write(0b0000);
+    alu_op.write(opcode_in.read());
   }
 }
 
 void PE::mux() {
-  if (demux_is_fpu.read()) {
-    dc_out.write(fpu_result.read());
+  if (active_mask_bit.read()) {
+    write_enable_out.write(true);
+    if (is_fpu_switch.read()) {
+      dc_out.write(fpu_result.read());
+    } else {
+      dc_out.write(alu_result.read());
+    }
   } else {
-    dc_out.write(alu_result.read());
+    write_enable_out.write(false);
+    dc_out.write(0);
   }
 }
 
