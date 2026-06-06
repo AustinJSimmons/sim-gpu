@@ -14,6 +14,9 @@ template <int NUM_OPERANDS, int NUM_THREADS> SC_MODULE(OC_UNIT) {
   // Register array
   // NUM_OPERANDS = largest num of operands per single instruction (FMAD) = 3
   sc_int<32> register_array[NUM_OPERANDS][NUM_THREADS];
+  bool src1_valid;
+  bool src2_valid;
+  bool src3_valid;
 
   struct DispatchPayload {
     sc_int<32> src1;

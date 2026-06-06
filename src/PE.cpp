@@ -19,16 +19,12 @@ void PE::demux() {
 }
 
 void PE::mux() {
-  if (active_mask_bit.read()) {
-    write_enable_out.write(true);
-    if (is_fpu_switch.read()) {
-      dc_out.write(fpu_result.read());
-    } else {
-      dc_out.write(alu_result.read());
-    }
+  write_enable_out.write(active_mask_bit.read());
+
+  if (is_fpu_switch.read()) {
+    dc_out.write(fpu_result.read());
   } else {
-    write_enable_out.write(false);
-    dc_out.write(0);
+    dc_out.write(alu_result.read());
   }
 }
 
