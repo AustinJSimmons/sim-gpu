@@ -4,6 +4,13 @@
  *
  * It will contain 32 registers accessable per thread.
  *
+ * This needs to be updated to use pseudo random memory bank
+ * interleaving to improve efficiency of accessing memory accross
+ * warps.
+ *
+ * Use some sort of has function to assign bank_IDs to different
+ * registers.
+ *
  **/
 
 #ifndef RF_H
