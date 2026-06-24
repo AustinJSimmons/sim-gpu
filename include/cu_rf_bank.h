@@ -14,15 +14,8 @@ using namespace sc_core;
 using namespace sc_dt;
 
 template <int REG_PER_THREAD, int NUM_THREADS> SC_MODULE(RFB) {
-  // Register array should be a flat 1D array of rows to represent
-  // the hardware reality.
-  // BANK_DEPTH gives us the number registers (rows) each bank will
-  // be responsible for.
-  // NUM_THREADS determines the width of our rows so that threads have
-  // their own 32 bit registers to access.
   sc_int<32> mem_array[REG_PER_THREAD];
 
-  // Control signals for selecting thread specific registers.
   sc_in<bool> clk;
 
   sc_in<sc_bv<NUM_THREADS>> write_mask; // Only writes to threads needing writes

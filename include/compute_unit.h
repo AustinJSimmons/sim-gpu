@@ -6,9 +6,9 @@
 
 // Include all children
 #include "PE.h"
-#include "RFB.h"
 #include "cu_control_unit.h"
 #include "cu_cross_bar_switch.h"
+#include "cu_register_file.h"
 
 #include "systemc"
 using namespace sc_core;
