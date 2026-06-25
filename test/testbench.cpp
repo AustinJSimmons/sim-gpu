@@ -41,17 +41,6 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
   pe1->dc_out(result_pe);
   pe1->write_enable_out(write_out_enable);
 
-  rf0 = new RF<32, 4>("RF_0");
-  rf0->global_read_addr(global_read_addr);
-  rf0->global_write_addr(global_write_addr);
-  rf0->global_write_enable(global_write_enable);
-  rf0->global_write_mask(global_write_mask);
-  for (int i = 0; i < 4; i++) {
-    rf0->global_read_data_out[i](global_read_data_out[i]);
-    rf0->global_write_data_in[i](global_write_data_in[i]);
-  }
-  rf0->clk(this->clk);
-
   SC_THREAD(test_alu);
   SC_THREAD(test_fpu);
   SC_THREAD(test_pe);

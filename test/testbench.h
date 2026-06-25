@@ -11,7 +11,6 @@ using namespace sc_dt;
 #include "ALU.h"
 #include "FPU.h"
 #include "PE.h"
-#include "cu_register_file.h"
 
 #ifndef TEST_H
 #define TEST_H
@@ -40,7 +39,6 @@ SC_MODULE(TestBench) {
   ALU *alu1;
   FPU *fpu1;
   PE *pe1;
-  RF<32, 4> *rf0;
 
   // Define test functions.
   void test_alu();
