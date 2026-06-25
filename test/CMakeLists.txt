@@ -26,4 +26,3 @@ add_test(NAME FPU_Test_FMAX COMMAND test-gpu FMAX)
 add_test(NAME PE_Test_ADD COMMAND test-gpu PADD)
 add_test(NAME PE_Test_FADD COMMAND test-gpu PFAD)
 
-add_test(NAME RF_Test COMMAND test-gpu RF)

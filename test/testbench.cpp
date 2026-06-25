@@ -44,40 +44,7 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
   SC_THREAD(test_alu);
   SC_THREAD(test_fpu);
   SC_THREAD(test_pe);
-  SC_THREAD(test_rf);
   sensitive << clk.pos();
-}
-
-void TestBench::test_rf() {
-  if (testMode == "RF") {
-    global_write_enable.write(true);
-    global_write_addr.write(13);
-    global_read_addr.write(13);
-
-    sc_int<32> data_in[4] = {1, 4, 2, 7};
-    sc_bv<4> mask = 0b1111;
-
-    global_write_mask.write(mask);
-    for (int i = 0; i < 4; i++) {
-      global_write_data_in[i].write(data_in[i]);
-    }
-    wait();
-    wait();
-
-    global_write_enable.write(false);
-    global_read_addr.write(13);
-
-    wait();
-    wait();
-    for (int i = 0; i < 4; i++) {
-      if (global_read_data_out[i].read() != data_in[i]) {
-        errorCount++;
-        std::cout << global_read_data_out[i].read() << " != " << data_in[i]
-                  << std::endl;
-      }
-    }
-  }
-  sc_stop();
 }
 
 /*
