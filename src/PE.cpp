@@ -19,8 +19,6 @@ void PE::demux() {
 }
 
 void PE::mux() {
-  write_enable_out.write(active_mask_bit.read());
-
   if (is_fpu_switch.read()) {
     dc_out.write(fpu_result.read());
   } else {

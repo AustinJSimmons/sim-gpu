@@ -23,13 +23,11 @@
 SC_MODULE(PE) {
   // 1. Ports (how it connects to the rest of the GPU)
   sc_in<bool> is_fpu_switch;
-  sc_in<bool> active_mask_bit; // Used for thread divergence
   sc_in<sc_bv<4>> opcode_in;
   sc_in<sc_int<32>> dc_in_a;
   sc_in<sc_int<32>> dc_in_b;
   sc_in<sc_int<32>> dc_in_c;
   sc_out<sc_int<32>> dc_out;
-  sc_out<bool> write_enable_out;
 
   // 2. Internal Signals (Wiring)
   sc_signal<sc_bv<4>> alu_op;
@@ -67,7 +65,7 @@ SC_MODULE(PE) {
     sensitive << is_fpu_switch << dc_in_a << dc_in_b << dc_in_c;
 
     SC_METHOD(mux);
-    sensitive << active_mask_bit << fpu_result << alu_result;
+    sensitive << fpu_result << alu_result;
   }
 
   // Destructor prototype
