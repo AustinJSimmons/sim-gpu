@@ -70,6 +70,7 @@ SC_MODULE(SM) {
     // Bind system clocks
     cu->clk(clk);
     lsu->clk(clk);
+    register_file->clk(clk);
 
     // CU control path
     cu->opcode(wire_opcode);

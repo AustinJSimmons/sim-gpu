@@ -62,7 +62,7 @@ SC_MODULE(PE) {
     fpu->result(fpu_result);
 
     SC_METHOD(demux);
-    sensitive << is_fpu_switch << dc_in_a << dc_in_b << dc_in_c;
+    sensitive << is_fpu_switch << opcode_in << dc_in_a << dc_in_b << dc_in_c;
 
     SC_METHOD(mux);
     sensitive << fpu_result << alu_result;

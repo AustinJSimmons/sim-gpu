@@ -13,6 +13,7 @@ using namespace sc_core;
 using namespace sc_dt;
 
 template <int WARP_SIZE, int NUM_REG> SC_MODULE(RF) {
+  sc_in_clk clk;
   // Registers based on threads and registers
   sc_int<32> registers[WARP_SIZE][NUM_REG];
 
@@ -39,9 +40,8 @@ template <int WARP_SIZE, int NUM_REG> SC_MODULE(RF) {
     sensitive << rs1_addr << rs2_addr << rd_addr;
 
     SC_METHOD(write_process);
-    for (int i = 0; i < WARP_SIZE; i++) {
-      sensitive << data_in_write[i] << write_enable[i];
-    }
+    sensitive << clk.neg();
+    dont_initialize();
   }
 
   void read_process() {

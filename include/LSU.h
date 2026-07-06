@@ -46,7 +46,11 @@ template <int WARP_SIZE, int MEM_SIZE> SC_MODULE(LSU) {
       global_mem[i] = 0;
     }
     SC_METHOD(execute);
-    sensitive << clk.pos();
+    // sensitive << clk.pos();
+    sensitive << is_load << is_store << offset;
+    for (int i = 0; i < WARP_SIZE; i++) {
+      sensitive << base_addr[i] << store_data[i] << active_mask[i];
+    }
   }
 
   void execute() {

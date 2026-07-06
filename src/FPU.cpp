@@ -23,6 +23,7 @@ void FPU::execute() {
     break;
   case 0x0F:
     f_r = f_a * f_b;
+    std::cout << f_a << " * " << f_b << std::endl;
     break;
   case 0x10:
     f_r = f_a / f_b;

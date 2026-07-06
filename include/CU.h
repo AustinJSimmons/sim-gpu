@@ -40,6 +40,8 @@ template <int WARP_SIZE, int NUM_INSTRUCTION> SC_MODULE(CU) {
     pc_reg.write(0); // init the pc reg
     SC_METHOD(execute_pipeline);
     sensitive << clk.pos();
+
+    dont_initialize();
   };
 
   void execute_pipeline() {
