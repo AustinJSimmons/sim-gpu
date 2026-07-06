@@ -14,31 +14,31 @@ void ALU::execute() {
   sc_int<32> res = 0;
   // Define different actions for each Oppcode
   switch (op.to_uint()) {
-  case 0b0001:
+  case 0x03:
     res = a + b;
     break; // ADD
-  case 0b0010:
+  case 0x04:
     res = a - b;
     break; // SUB
-  case 0b0011:
+  case 0x05:
     res = a * b;
     break; // MUL
-  case 0b0100:
+  case 0x07:
     res = a & b;
     break; // AND
-  case 0b0101:
+  case 0x08:
     res = a | b;
     break; // OR
-  case 0b0110:
+  case 0x09:
     res = ~a;
     break; // NOT
-  case 0b0111:
+  case 0x0A:
     res = a ^ b;
     break; // XOR
-  case 0b1000:
+  case 0x0B:
     res = a << b;
     break;
-  case 0b1001:
+  case 0x0C:
     res = a >> b;
     break;
   default:

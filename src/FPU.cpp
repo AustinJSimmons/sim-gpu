@@ -4,6 +4,7 @@
 
 void FPU::execute() {
   sc_bv<6> op = op_switch.read();
+  std::cout << op.to_int() << " is the opcode" << std::endl;
   int a = src1.read();
   int b = src2.read();
   int c = src3.read();
@@ -14,25 +15,25 @@ void FPU::execute() {
   float f_r = 0.0f;
 
   switch (op.to_uint()) {
-  case 0b0001:
+  case 0x0D:
     f_r = f_a + f_b;
     break;
-  case 0b0010:
+  case 0x0E:
     f_r = f_a - f_b;
     break;
-  case 0b0011:
+  case 0x0F:
     f_r = f_a * f_b;
     break;
-  case 0b0100:
+  case 0x10:
     f_r = f_a / f_b;
     break;
-  case 0b0101:
+  case 0x11:
     f_r = std::fmaf(f_a, f_b, f_c);
     break;
-  case 0b0110:
+  case 0x12:
     f_r = std::min(f_a, f_b);
     break;
-  case 0b0111:
+  case 0x13:
     f_r = std::max(f_a, f_b);
     break;
   default:

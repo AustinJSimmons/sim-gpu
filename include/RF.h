@@ -14,7 +14,7 @@ using namespace sc_dt;
 
 template <int WARP_SIZE, int NUM_REG> SC_MODULE(RF) {
   // Registers based on threads and registers
-  sc_uint<32> registers[WARP_SIZE][NUM_REG];
+  sc_int<32> registers[WARP_SIZE][NUM_REG];
 
   // Control Path
   sc_in<sc_uint<5>> rs1_addr;
@@ -61,7 +61,7 @@ template <int WARP_SIZE, int NUM_REG> SC_MODULE(RF) {
     }
   }
 
-  ~RF();
+  ~RF(){};
 };
 
 #endif // !RF_H

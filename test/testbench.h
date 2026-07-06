@@ -23,7 +23,7 @@ SC_MODULE(TestBench) {
 
   // Define shared ports of all components being tested.
   sc_signal<bool> is_fpu, is_active_pe, write_out_enable;
-  sc_signal<sc_bv<4>> opcode_alu, opcode_fpu, opcode_pe;
+  sc_signal<sc_bv<6>> opcode_alu, opcode_fpu, opcode_pe;
   sc_signal<sc_int<32>> a_alu, b_alu, a_fpu, b_fpu, c_fpu, a_pe, b_pe, c_pe;
   sc_signal<sc_int<32>> result_alu, result_fpu, result_pe;
 
@@ -31,7 +31,7 @@ SC_MODULE(TestBench) {
   sc_signal<bool> global_write_enable;
   sc_signal<sc_uint<5>> global_write_addr;
   sc_signal<sc_int<32>> global_write_data_in[4];
-  sc_signal<sc_bv<4>> global_write_mask;
+  sc_signal<sc_bv<6>> global_write_mask;
   sc_signal<sc_uint<5>> global_read_addr;
   sc_signal<sc_int<32>> global_read_data_out[4];
 

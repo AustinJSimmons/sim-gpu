@@ -26,3 +26,18 @@ add_test(NAME FPU_Test_FMAX COMMAND test-gpu FMAX)
 add_test(NAME PE_Test_ADD COMMAND test-gpu PADD)
 add_test(NAME PE_Test_FADD COMMAND test-gpu PFAD)
 
+# 1. Define the new test executable
+add_executable(test-kernel test_kernel.cpp)
+
+# 2. Tell it where to find your header files (SM.h, CU.h, etc.)
+target_include_directories(test-kernel PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+# 3. Link it to your hardware modules and SystemC
+# NOTE: Match the exact SystemC library variable used by test-gpu!
+target_link_libraries(test-kernel
+  component_lib
+  ${SystemC_LIBRARIES})
+
+# 4. Register it with CTest (CMake's testing framework)
+add_test(NAME VectorDotProductKernel COMMAND test-kernel)
+

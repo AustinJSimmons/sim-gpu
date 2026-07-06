@@ -43,6 +43,8 @@ SC_MODULE(SM) {
   sc_signal<sc_uint<5>> wire_rd_addr;
   sc_vector<sc_signal<bool>> wire_rf_we;
   sc_vector<sc_signal<bool>> wire_active_mask;
+  sc_signal<sc_bv<4>> wire_preds;
+  sc_signal<sc_uint<22>> wire_c_offset;
 
   // LSU specific paths
   sc_signal<bool> wire_lsu_is_load;
@@ -58,7 +60,9 @@ SC_MODULE(SM) {
         wire_final_writeback("wire_final_writeback", WARP_SIZE),
         wire_rf_to_pe_a("wire_rf_to_pe_a", WARP_SIZE),
         wire_rf_to_pe_b("wire_rf_to_pe_b", WARP_SIZE),
-        wire_rf_to_pe_c("wire_rf_to_pe_c", WARP_SIZE) {
+        wire_rf_to_pe_c("wire_rf_to_pe_c", WARP_SIZE),
+        wire_active_mask("wire_active_mask", WARP_SIZE),
+        wire_rf_we("wire_rf_we", WARP_SIZE), pe_array("pe_array", WARP_SIZE) {
     cu = new CU<WARP_SIZE, NUM_INSTRUCTIONS>("Control_Unit");
     lsu = new LSU<WARP_SIZE, MEM_SIZE>("Load_Store_Unit");
     register_file = new RF<WARP_SIZE, NUM_REG>("Vectorized_Register_File");
@@ -76,6 +80,8 @@ SC_MODULE(SM) {
     cu->offset(wire_lsu_offset);
     cu->is_load(wire_lsu_is_load);
     cu->is_store(wire_lsu_is_store);
+    cu->preds(wire_preds);
+    cu->c_offset(wire_c_offset);
 
     // RF control path
     register_file->rs1_addr(wire_rs1_addr);
@@ -104,7 +110,7 @@ SC_MODULE(SM) {
       // Final Writeback: Wire -> RF
       register_file->data_in_write[i](wire_final_writeback[i]);
 
-      lsu->base_addr_data[i](wire_rf_to_pe_a[i]);
+      lsu->base_addr[i](wire_rf_to_pe_a[i]);
       lsu->store_data[i](wire_rf_to_pe_b[i]);
       lsu->load_data[i](wire_lsu_res[i]);
 
@@ -141,7 +147,11 @@ SC_MODULE(SM) {
     }
   }
 
-  ~SM(){};
+  ~SM() {
+    delete cu;
+    delete lsu;
+    delete register_file;
+  };
 };
 
 #endif // !SM_H

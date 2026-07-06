@@ -29,7 +29,7 @@ template <int WARP_SIZE, int MEM_SIZE> SC_MODULE(LSU) {
   sc_vector<sc_in<bool>> active_mask;
 
   // Datapath
-  sc_vector<sc_in<sc_uint<32>>> base_addr;
+  sc_vector<sc_in<sc_int<32>>> base_addr;
   sc_vector<sc_in<sc_int<32>>> store_data;
   sc_vector<sc_out<sc_int<32>>> load_data;
 
@@ -78,7 +78,7 @@ template <int WARP_SIZE, int MEM_SIZE> SC_MODULE(LSU) {
   }
 
   // Destructor
-  ~LSU();
+  ~LSU(){};
 };
 
 #endif // !
