@@ -109,8 +109,8 @@ types.
 
 | Mnemonic | Op-code | Instruction Type | Description |
 | :--- | :--- | :--- | :--- |
-| `LOAD` | `0x00` | S-Type | (base_reg * offset) = mem_addr -> rd |
-| `STORE` | `0x01` | S-Type | src-> (base_reg * offset) = mem_addr |
+| `LOAD` | `0x00` | S-Type | (base_reg + offset) = mem_addr -> rd |
+| `STORE` | `0x01` | S-Type | src-> (base_reg + offset) = mem_addr |
 | `MOV` | `0x02` | M-Type | src1 -> rd |
 | `ADD` | `0x03` | M-Type | rd = src1 + src2 |
 | `SUB` | `0x04` | M-Type | rd = src1 - src2 |
