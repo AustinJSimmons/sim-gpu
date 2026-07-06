@@ -3,7 +3,7 @@
 #include <cmath>
 
 void FPU::execute() {
-  sc_bv<4> op = op_switch.read();
+  sc_bv<6> op = op_switch.read();
   int a = src1.read();
   int b = src2.read();
   int c = src3.read();

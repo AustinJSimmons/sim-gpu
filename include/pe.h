@@ -23,18 +23,18 @@
 SC_MODULE(PE) {
   // 1. Ports (how it connects to the rest of the GPU)
   sc_in<bool> is_fpu_switch;
-  sc_in<sc_bv<4>> opcode_in;
+  sc_in<sc_bv<6>> opcode_in;
   sc_in<sc_int<32>> dc_in_a;
   sc_in<sc_int<32>> dc_in_b;
   sc_in<sc_int<32>> dc_in_c;
   sc_out<sc_int<32>> dc_out;
 
   // 2. Internal Signals (Wiring)
-  sc_signal<sc_bv<4>> alu_op;
+  sc_signal<sc_bv<6>> alu_op;
   sc_signal<sc_int<32>> alu_in_a;
   sc_signal<sc_int<32>> alu_in_b;
   sc_signal<sc_int<32>> alu_result;
-  sc_signal<sc_bv<4>> fpu_op;
+  sc_signal<sc_bv<6>> fpu_op;
   sc_signal<sc_int<32>> fpu_in_a;
   sc_signal<sc_int<32>> fpu_in_b;
   sc_signal<sc_int<32>> fpu_in_c; // for FMAD

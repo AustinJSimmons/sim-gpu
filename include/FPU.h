@@ -21,7 +21,7 @@ using namespace sc_dt;
 
 SC_MODULE(FPU) {
   // Ports
-  sc_in<sc_bv<4>> op_switch;
+  sc_in<sc_bv<6>> op_switch;
   sc_in<sc_int<32>> src1;
   sc_in<sc_int<32>> src2;
   sc_in<sc_int<32>> src3; // for FMAD

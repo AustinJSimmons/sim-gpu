@@ -47,6 +47,10 @@ SC_MODULE(SM) {
   // LSU specific paths
   sc_signal<bool> wire_lsu_is_load;
   sc_signal<bool> wire_lsu_is_store;
+  sc_signal<sc_uint<16>> wire_lsu_offset;
+
+  // PE specific paths
+  sc_signal<bool> wire_is_fpu_op;
 
   SC_CTOR(SM)
       : wire_pe_res("wire_pe_res", WARP_SIZE),
@@ -68,23 +72,31 @@ SC_MODULE(SM) {
     cu->rs1_addr(wire_rs1_addr);
     cu->rs2_addr(wire_rs2_addr);
     cu->rd_addr(wire_rd_addr);
+    cu->is_fpu_op(wire_is_fpu_op);
+    cu->offset(wire_lsu_offset);
+    cu->is_load(wire_lsu_is_load);
+    cu->is_store(wire_lsu_is_store);
 
     // RF control path
     register_file->rs1_addr(wire_rs1_addr);
     register_file->rs2_addr(wire_rs2_addr);
     register_file->rd_addr(wire_rd_addr);
 
-    for (int i = 0; i < WARP_SIZE; i++) {
-      // RF Write Enables
-      cu->rf_write_enable[i](wire_rf_we[i]);
-      register_file->write_enable[i](wire_rf_we[i]);
+    // LSU control path
+    lsu->is_load(wire_lsu_is_load);
+    lsu->is_store(wire_lsu_is_store);
+    lsu->offset(wire_lsu_offset);
 
+    for (int i = 0; i < WARP_SIZE; i++) {
       // Vector Data Path: RF -> PE
       register_file->data_out_a[i](wire_rf_to_pe_a[i]);
       pe_array[i].dc_in_a(wire_rf_to_pe_a[i]);
 
       register_file->data_out_b[i](wire_rf_to_pe_b[i]);
       pe_array[i].dc_in_b(wire_rf_to_pe_b[i]);
+
+      register_file->data_out_c[i](wire_rf_to_pe_c[i]);
+      pe_array[i].dc_in_c(wire_rf_to_pe_c[i]);
 
       // Vector Data Path: PE -> Wires
       pe_array[i].dc_out(wire_pe_res[i]);
@@ -95,7 +107,14 @@ SC_MODULE(SM) {
       lsu->base_addr_data[i](wire_rf_to_pe_a[i]);
       lsu->store_data[i](wire_rf_to_pe_b[i]);
       lsu->load_data[i](wire_lsu_res[i]);
+
+      // control
       lsu->active_mask[i](wire_active_mask[i]);
+      pe_array[i].is_fpu_switch(wire_is_fpu_op); // Tell PE to use ALU or FPU
+      pe_array[i].opcode_in(wire_opcode);
+      cu->rf_write_enable[i](wire_rf_we[i]);
+      cu->active_mask[i](wire_active_mask[i]);
+      register_file->write_enable[i](wire_rf_we[i]);
     }
 
     SC_METHOD(writeback_mux);
@@ -122,7 +141,7 @@ SC_MODULE(SM) {
     }
   }
 
-  ~SM() { delete register_file; };
+  ~SM(){};
 };
 
 #endif // !SM_H
