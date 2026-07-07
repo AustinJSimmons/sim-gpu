@@ -8,12 +8,16 @@
 
 void ALU::execute() {
   sc_bv<6> op = op_switch.read();
+  sc_bv<3> cmp_mod = mod.read();
   sc_int<32> a = input_a.read();
   sc_int<32> b = input_b.read();
 
   sc_int<32> res = 0;
   // Define different actions for each Oppcode
   switch (op.to_uint()) {
+  case 0x02:
+    res = a;
+    break; // MOV
   case 0x03:
     res = a + b;
     break; // ADD
@@ -23,6 +27,20 @@ void ALU::execute() {
   case 0x05:
     res = a * b;
     break; // MUL
+  case 0x06:
+    res = 0;
+    switch (cmp_mod.to_uint()) {
+    case 0b000:
+      pred_out.write(a == b);
+      break;
+    case 0b001:
+      pred_out.write(a < b);
+      break;
+    case 0b010:
+      pred_out.write(a > b);
+      break;
+    }
+    break;
   case 0x07:
     res = a & b;
     break; // AND

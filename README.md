@@ -115,7 +115,7 @@ types.
 | `ADD` | `0x03` | M-Type | rd = src1 + src2 |
 | `SUB` | `0x04` | M-Type | rd = src1 - src2 |
 | `MUL` | `0x05` | M-Type | rd *= src2 |
-| `` | `0x06` | -Type | |
+| `CMP` | `0x06` | M-Type | |
 | `AND` | `0x07` | M-Type | rd = src1 AND src2 |
 | `OR` | `0x08` | M-Type | rd = src1 OR src2 |
 | `NOT` | `0x09` | M-Type | rd = NOT rd |

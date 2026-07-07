@@ -41,6 +41,7 @@ SC_MODULE(SM) {
   sc_signal<sc_uint<5>> wire_rs1_addr;
   sc_signal<sc_uint<5>> wire_rs2_addr;
   sc_signal<sc_uint<5>> wire_rd_addr;
+  sc_signal<sc_bv<3>> wire_mod;
   sc_vector<sc_signal<bool>> wire_rf_we;
   sc_vector<sc_signal<bool>> wire_active_mask;
   sc_signal<sc_bv<4>> wire_preds;
@@ -119,6 +120,7 @@ SC_MODULE(SM) {
       lsu->active_mask[i](wire_active_mask[i]);
       pe_array[i].is_fpu_switch(wire_is_fpu_op); // Tell PE to use ALU or FPU
       pe_array[i].opcode_in(wire_opcode);
+      pe_array[i].mod(wire_mod);
       cu->rf_write_enable[i](wire_rf_we[i]);
       cu->active_mask[i](wire_active_mask[i]);
       register_file->write_enable[i](wire_rf_we[i]);

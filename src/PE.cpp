@@ -8,6 +8,7 @@ void PE::demux() {
 
   alu_in_a.write(dc_in_a.read());
   alu_in_b.write(dc_in_b.read());
+  alu_mod.write(mod);
 
   if (is_fpu_switch.read()) {
     fpu_op.write(opcode_in.read());

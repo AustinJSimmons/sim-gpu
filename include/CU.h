@@ -21,10 +21,14 @@ template <int WARP_SIZE, int NUM_INSTRUCTION> SC_MODULE(CU) {
   // PC (Program Counter)
   sc_signal<sc_uint<32>> pc_reg;
 
+  // Pred Reg File
+  sc_signal<bool> p_file[16];
+
   sc_out<sc_bv<6>> opcode;
   sc_out<sc_uint<5>> rs1_addr;
   sc_out<sc_uint<5>> rs2_addr;
   sc_out<sc_uint<5>> rd_addr;
+  sc_out<sc_bv<3>> mod_out;
   sc_out<sc_uint<16>> offset;
   sc_out<sc_bv<4>> preds;
   sc_out<sc_uint<22>> c_offset;
@@ -33,10 +37,11 @@ template <int WARP_SIZE, int NUM_INSTRUCTION> SC_MODULE(CU) {
   sc_out<bool> is_fpu_op;
   sc_vector<sc_out<bool>> rf_write_enable;
   sc_vector<sc_out<bool>> active_mask;
+  sc_vector<sc_in<bool>> pred_in;
 
   SC_CTOR(CU)
       : rf_write_enable("rf_write_enable", WARP_SIZE),
-        active_mask("active_mask", WARP_SIZE) {
+        active_mask("active_mask", WARP_SIZE), pred_in("pred_in", WARP_SIZE) {
     pc_reg.write(0); // init the pc reg
     SC_METHOD(execute_pipeline);
     sensitive << clk.pos();
@@ -53,7 +58,7 @@ template <int WARP_SIZE, int NUM_INSTRUCTION> SC_MODULE(CU) {
     is_load.write(op_val.to_uint() == 0x00);
     is_store.write(op_val.to_uint() == 0x01);
 
-    // 2. Determine if it's an FPU operation (Based on your ISA, 0x0D to 0x13)
+    // 2. Determine if it's an FPU operation (Based on ISA, 0x0D to 0x13)
     is_fpu_op.write(op_val.to_uint() >= 0x0D && op_val.to_uint() <= 0x13);
 
     // 3. Determine if instruction writes to RF (LOAD or Math)
@@ -82,6 +87,7 @@ template <int WARP_SIZE, int NUM_INSTRUCTION> SC_MODULE(CU) {
       rs1_addr.write(raw_instruction.range(10, 6).to_uint());
       rs2_addr.write(raw_instruction.range(15, 11).to_uint());
       rd_addr.write(raw_instruction.range(20, 16).to_uint());
+      mod_out.write(raw_instruction.range(23, 21));
 
     } else {
       preds.write(raw_instruction.range(9, 6));
