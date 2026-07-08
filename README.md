@@ -115,7 +115,7 @@ types.
 | `ADD` | `0x03` | M-Type | rd = src1 + src2 |
 | `SUB` | `0x04` | M-Type | rd = src1 - src2 |
 | `MUL` | `0x05` | M-Type | rd *= src2 |
-| `CMP` | `0x06` | M-Type | |
+| `CMP` | `0x06` | M-Type | Requires modifier .EQ, .LT, or .GT and Predicate register number P0-16. Based on modifier compares src1 = src2, src1 < src2, and finally src1 > src2 and sets the predicate bit in P# to 1 if the comparison evals to true. |
 | `AND` | `0x07` | M-Type | rd = src1 AND src2 |
 | `OR` | `0x08` | M-Type | rd = src1 OR src2 |
 | `NOT` | `0x09` | M-Type | rd = NOT rd |

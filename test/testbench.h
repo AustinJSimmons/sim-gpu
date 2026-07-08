@@ -22,10 +22,12 @@ SC_MODULE(TestBench) {
   sc_in<bool> clk;
 
   // Define shared ports of all components being tested.
-  sc_signal<bool> is_fpu, is_active_pe, write_out_enable;
+  sc_signal<bool> is_fpu, is_active_pe, write_out_enable, pe_pred_out,
+      alu_pred_out;
   sc_signal<sc_bv<6>> opcode_alu, opcode_fpu, opcode_pe;
   sc_signal<sc_int<32>> a_alu, b_alu, a_fpu, b_fpu, c_fpu, a_pe, b_pe, c_pe;
   sc_signal<sc_int<32>> result_alu, result_fpu, result_pe;
+  sc_signal<sc_bv<3>> alu_mod, pe_mod;
 
   // RF testing stuff
   sc_signal<bool> global_write_enable;
@@ -44,7 +46,6 @@ SC_MODULE(TestBench) {
   void test_alu();
   void test_fpu();
   void test_pe();
-  void test_rf();
 
   bool rough_equal();
 

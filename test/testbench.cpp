@@ -23,6 +23,8 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
   alu1->input_a(a_alu);
   alu1->input_b(b_alu);
   alu1->result(result_alu);
+  alu1->mod(alu_mod);
+  alu1->pred_out(alu_pred_out);
 
   fpu1 = new FPU("FPU_1");
   fpu1->op_switch(opcode_fpu);
@@ -38,6 +40,8 @@ TestBench::TestBench(sc_module_name name, std::string testMode)
   pe1->dc_in_b(b_pe);
   pe1->dc_in_c(c_pe);
   pe1->dc_out(result_pe);
+  pe1->pred_out(pe_pred_out);
+  pe1->mod(pe_mod);
 
   SC_THREAD(test_alu);
   SC_THREAD(test_fpu);

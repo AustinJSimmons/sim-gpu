@@ -1,7 +1,9 @@
+#include "Assembler.h"
 #include "SM.h"
 #include "helpers.h" // Assuming you use this for typePunning floats
 #include <iostream>
 #include <systemc.h>
+#include <vector>
 
 // Define our SM template parameters
 #define WARP_SIZE 32
@@ -16,6 +18,16 @@ int sc_main(int argc, char *argv[]) {
   SM<WARP_SIZE, MEM_SIZE, NUM_INSTRUCTIONS, NUM_REG, DATA_SIZE> sm(
       "Streaming_Multiprocessor");
   sm.clk(sysclk);
+
+  // Assembler temp stuff
+  std::vector<uint32_t> kernel_bin;
+  std::string kernel_path = "../../test/test_kernel.asm";
+  kernel_bin = Assembler::compile(kernel_path);
+
+  if (kernel_bin.empty()) {
+    std::cout << "Failed to compile assembly" << std::endl;
+    return 1;
+  }
 
   // ==========================================
   // 2. Load the Kernel into the Instruction Cache

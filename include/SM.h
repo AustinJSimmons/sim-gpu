@@ -44,6 +44,7 @@ SC_MODULE(SM) {
   sc_signal<sc_bv<3>> wire_mod;
   sc_vector<sc_signal<bool>> wire_rf_we;
   sc_vector<sc_signal<bool>> wire_active_mask;
+  sc_vector<sc_signal<bool>> wire_pe_pred_out;
   sc_signal<sc_bv<4>> wire_preds;
   sc_signal<sc_uint<22>> wire_c_offset;
 
@@ -63,7 +64,8 @@ SC_MODULE(SM) {
         wire_rf_to_pe_b("wire_rf_to_pe_b", WARP_SIZE),
         wire_rf_to_pe_c("wire_rf_to_pe_c", WARP_SIZE),
         wire_active_mask("wire_active_mask", WARP_SIZE),
-        wire_rf_we("wire_rf_we", WARP_SIZE), pe_array("pe_array", WARP_SIZE) {
+        wire_rf_we("wire_rf_we", WARP_SIZE), pe_array("pe_array", WARP_SIZE),
+        wire_pe_pred_out("wire_pred_out", WARP_SIZE) {
     cu = new CU<WARP_SIZE, NUM_INSTRUCTIONS>("Control_Unit");
     lsu = new LSU<WARP_SIZE, MEM_SIZE>("Load_Store_Unit");
     register_file = new RF<WARP_SIZE, NUM_REG>("Vectorized_Register_File");
@@ -83,6 +85,7 @@ SC_MODULE(SM) {
     cu->is_load(wire_lsu_is_load);
     cu->is_store(wire_lsu_is_store);
     cu->preds(wire_preds);
+    cu->mod_out(wire_mod);
     cu->c_offset(wire_c_offset);
 
     // RF control path
@@ -121,8 +124,10 @@ SC_MODULE(SM) {
       pe_array[i].is_fpu_switch(wire_is_fpu_op); // Tell PE to use ALU or FPU
       pe_array[i].opcode_in(wire_opcode);
       pe_array[i].mod(wire_mod);
+      pe_array[i].pred_out(wire_pe_pred_out[i]);
       cu->rf_write_enable[i](wire_rf_we[i]);
       cu->active_mask[i](wire_active_mask[i]);
+      cu->pred_in[i](wire_pe_pred_out[i]);
       register_file->write_enable[i](wire_rf_we[i]);
     }
 
